@@ -377,13 +377,19 @@ boolean use_shield() {
 }
 
 familiar start_familiar() {
+	familiar f100 = vars["is_100_run"].to_familiar();
+	if(f100!= $familiar[none]) return f100;
+	// From BCCAscend: get_property("bcasc_100familiar"), get_property("bcasc_defaultFamiliar")
+	
 	if(my_path() == "Zombie Slayer" && have_familiar($familiar[Hovering Skull]))
 		return $familiar[Hovering Skull];
+	
 	foreach f in $familiars[He-Boulder, Frumious Bandersnatch, Baby Bugged Bugbear, Bloovian Groose, Gluttonous Green Ghost, 
 	  Spirit Hobo, Fancypants Scarecrow, Ancient Yuletide Troll, Cheshire Bat, Cymbal-Playing Monkey, Nervous Tick, 
 	  Hunchbacked Minion, Uniclops, Chauvinist Pig, Dramatic Hedgehog, Blood-Faced Volleyball, Reagnimated Gnome, 
 	  Jill-O-Lantern, Hovering Sombrero]
 		if(have_familiar(f) && good(f)) return f;
+	
 	return $familiar[none];
 }
 
