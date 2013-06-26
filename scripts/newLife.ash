@@ -362,10 +362,12 @@ void visit_toot() {
 	visit_url("tutorial.php?action=toot&pwd");
 	if(item_amount($item[letter from King Ralph XI]) > 0 && good($item[letter from King Ralph XI]))
 		use(1, $item[letter from King Ralph XI]);
-	if(item_amount($item[pork elf goodies sack]) > 0 && good($item[pork elf goodies sack]))
-		use(1, $item[pork elf goodies sack]);
-	if(item_amount($item[baconstone]) + item_amount($item[hamethyst]) + item_amount($item[porquoise]) > 0 && vars["newLife_SellPorkForStuff"].to_boolean())
-		buy_stuff();
+	if(vars["newLife_SellPorkForStuff"].to_boolean()) {
+		if(item_amount($item[pork elf goodies sack]) > 0 && good($item[pork elf goodies sack]))
+			use(1, $item[pork elf goodies sack]);
+		if(item_amount($item[baconstone]) + item_amount($item[hamethyst]) + item_amount($item[porquoise]) > 0)
+			buy_stuff();
+	}
 }
 
 boolean use_shield() {
