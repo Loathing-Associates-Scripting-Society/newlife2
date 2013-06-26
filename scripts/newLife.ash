@@ -377,9 +377,20 @@ boolean use_shield() {
 }
 
 familiar start_familiar() {
+	void set_bcca(string f) {
+		if(get_property("bcasc_lastCouncilVisit") == "") return;
+		// Only set this if BCCAscend has actually been run by this player
+		set_property("bcasc_100familiar", f); 
+		set_property("bcasc_defaultFamiliar", f); 
+	}
+	// Check for the zlib variable "is_100_run"
 	familiar f100 = vars["is_100_run"].to_familiar();
-	if(f100!= $familiar[none]) return f100;
-	// From BCCAscend: get_property("bcasc_100familiar"), get_property("bcasc_defaultFamiliar")
+	if(f100 == $familiar[none]) {
+		set_bcca("");
+	} else {
+		set_bcca(vars["is_100_run"]);
+		return f100;
+	}
 	
 	if(my_path() == "Zombie Slayer" && have_familiar($familiar[Hovering Skull]))
 		return $familiar[Hovering Skull];
