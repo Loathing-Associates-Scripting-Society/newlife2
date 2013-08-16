@@ -12,7 +12,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 }
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
-Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, 14, BIG!] contains my_path())
+Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, 15, KOLHS] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
 	exit;
@@ -423,6 +423,8 @@ void equip_stuff() {
 		gear +=" +shield";
 	if(my_path() == "Bees Hate You")
 		gear += ", 0 beeosity";
+	else if(my_path() == "KOLHS" || my_path() == "15")
+		gear+= " -hat";
 	maximize(gear, false);
 }
 
