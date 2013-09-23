@@ -118,6 +118,11 @@ void set_choice_adventures() {
 	set_choice(677, 0, "Steam Punk Giant's Room: Manual");
 	set_choice(678, 0, "Punk Rock Giant's Room: Manual");
 	set_choice(679, 1, "Spin That Wheel, Giants Get Real");
+	// Hidden City!
+	set_choice(781, 1, "An Overgrown Shrine (Northwest)");
+	set_choice(783, 1, "An Overgrown Shrine (Southwest)");
+	set_choice(785, 1, "An Overgrown Shrine (Northeast)");
+	set_choice(787, 1, "An Overgrown Shrine (Southeast)");
 	
 	// Path specific choices
 	if(my_path() == "Way of the Surprising Fist")
@@ -153,10 +158,6 @@ void set_choice_adventures() {
 		set_choice(148, 1, "McMillicancuddy's Farm: Back 40");
 		set_choice(149, 2, "McMillicancuddy's Farm: The Other Back 40");
 	}
-	if(have_skill($skill[Torso Awaregness]) && have_skill($skill[Armorcraftiness]) || have_skill($skill[Ur-Kel's Aria of Annoyance]))
-		set_choice(182, 1, "Fantasy Airship, Lack of an Encounter: Fight MechaMech for metallic A if you turn up the ML");
-	else
-		set_choice(182, 3, "Fantasy Airship, Lack of an Encounter: Get Stats");
 	// In BIG! There is no need for leveling up
 	if(my_path() == "BIG!") {
 		set_choice("oceanDestination", "ignore", "At the Poop Deck: Skip the wheel");
