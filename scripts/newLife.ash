@@ -334,7 +334,8 @@ void buy_stuff() {
 	}
 
 	if(good($item[chewing gum on a string])) {
-		boolean accordion = item_amount($item[stolen accordion]) == 0 && good($item[stolen accordion]);
+		#boolean accordion = item_amount($item[stolen accordion]) == 0 && good($item[stolen accordion]);
+		boolean accordion = false; // Quck change for AT revamp. I'll be better later.
 		boolean sealtooth = item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && my_class() != $class[Disco Bandit];
 		boolean radio = item_amount($item[detuned radio]) == 0 && knoll_available() && good($item[detuned radio]);
 		int q = to_int(accordion) + to_int(sealtooth) + to_int(radio);
