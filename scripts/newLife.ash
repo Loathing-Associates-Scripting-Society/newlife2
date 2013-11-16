@@ -12,7 +12,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 }
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
-Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, 15, KOLHS] contains my_path())
+Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
 	exit;
@@ -36,18 +36,14 @@ boolean good(string it) {
 		if($strings[pork elf goodies sack, baconstone, hamethyst, porquoise, chewing gum on a string] contains it) return false;
 		break;
 	case "Avatar of Boris":
-		// Boris needs no accordion or wussy stasis. Boris also needs to save meat for an antique instrument
-		if($strings[stolen accordion, seal tooth, detuned radio, familiar] contains it) return false;
+		// Boris needs no wussy stasis. Boris also needs to save meat for an antique instrument
+		if($strings[seal tooth, detuned radio, familiar] contains it) return false;
 		break;
 	case "Zombie Slayer":
-		// Zombie Masters don't have accordion skills or hermit access
-		if($strings[stolen accordion, seal tooth] contains it) return false;
-		break;
-	case "Class Act":
-		if(it == "stolen accordion" && my_class() != $class[Accordion Thief]) return false;
+		// Zombie Masters don't have hermit access
+		if(it == "seal tooth") return false;
 		break;
 	case "Avatar of Jarlsberg":
-		if(it == "stolen accordion") return false;
 		if(it.to_familiar() != $familiar[none] || it == "familiar") return false;
 		break;
 	}
@@ -318,6 +314,18 @@ void get_bugged_balaclava() {
 	}
 }
 
+boolean need_accordion() {
+	// ATs come with a stolen accordion and ability to steal more
+	if(my_class() == $class[Accordion Thief]) return false;
+	if(item_amount($item[toy accordion]) > 0 || !good($item[toy accordion]))
+		return false;
+	// Can the character cast a skill that needs an accordion? (Unlimited skills only!)
+	foreach s in $skills[]
+		if(have_skill(s) && s.class == $class[Accordion Thief] && s.buff == true && s.dailylimit < 0)
+			return true;
+	return false;
+}
+
 void buy_stuff() {
 	boolean meat4pork(int price) {
 		if(my_meat() >= price) return true;
@@ -334,21 +342,21 @@ void buy_stuff() {
 	}
 
 	if(good($item[chewing gum on a string])) {
-		#boolean accordion = item_amount($item[stolen accordion]) == 0 && good($item[stolen accordion]);
-		boolean accordion = false; // Quck change for AT revamp. I'll be better later.
-		boolean sealtooth = item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && my_class() != $class[Disco Bandit];
-		boolean radio = item_amount($item[detuned radio]) == 0 && knoll_available() && good($item[detuned radio]);
+		boolean accordion = need_accordion();
+		// For disco bandits, Suckerpunch is better than seal tooth
+		boolean sealtooth = my_class() != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]);
+		boolean radio = knoll_available() && item_amount($item[detuned radio]) == 0 && good($item[detuned radio]);
 		int q = to_int(accordion) + to_int(sealtooth) + to_int(radio);
 		string garner;
-		if(accordion) garner  = "stolen accordion" + (q == 3? ", ": q == 2? " and a ": "");
+		if(accordion) garner  = "toy accordion" + (q == 3? ", ": q == 2? " and a ": "");
 		if(sealtooth) garner += "seal tooth"       + (radio? " and a ": "");
 		if(radio)     garner += "detuned radio";
 		if(garner != "")
 			vprint("Pork Elf stones are being autosold now to garner a "+garner+".", "blue", 3);
 		if(radio && item_amount($item[detuned radio]) == 0 && meat4pork(300))
 			buy(1, $item[detuned radio]);
-		while(accordion && available_amount($item[stolen accordion]) == 0 && meat4pork(50))
-			use(1, $item[chewing gum on a string]);
+		if(accordion && available_amount($item[toy accordion]) == 0 && meat4pork(150))
+			retrieve_item(1, $item[toy accordion]);
 		if(sealtooth && available_amount($item[seal tooth]) == 0) {
 			while(!worthless() && meat4pork(50))
 				use(1, $item[chewing gum on a string]);
@@ -601,7 +609,7 @@ setvar("newLife_SetupGuyMadeOfBees", FALSE); // If you like to set up the guy ma
 setvar("newLife_FightBedstands", FALSE);	// If this is set to TRUE, you'll prefer fighting Bedstands to getting meat. (Note that mainstat is still better than fighting.)
 setvar("newLife_SmashHippyStone", FALSE);	// Smash stone if you want to break it at level 1 for some PvPing!
 setvar("newLife_UseNewbieTent", TRUE);		// Use newbie tent if you don't want togive your clannes a fair shot at bricking you in the face!
-setvar("newLife_SellPorkForStuff", TRUE);	// Sell pork gems to purchase detuned radio, stolen accordion & seal tooth
+setvar("newLife_SellPorkForStuff", TRUE);	// Sell pork gems to purchase detuned radio, toy accordion & seal tooth
 setvar("newLife_Extras", FALSE); 			// Mixed bag of custom actions. This is personal to me, but maybe someone else will like it also
 
 void main() {
