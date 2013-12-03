@@ -329,7 +329,7 @@ boolean need_accordion() {
 	return false;
 }
 
-void buy_stuff() {
+void get_stuff() {
 	boolean meat4pork(int price) {
 		if(my_meat() >= price) return true;
 		if(item_amount($item[baconstone]) > 0) return autosell(1, $item[baconstone]);
@@ -357,7 +357,7 @@ void buy_stuff() {
 		if(garner != "")
 			vprint("Pork Elf stones are being autosold now to garner a "+garner+".", "blue", 3);
 		if(radio && item_amount($item[detuned radio]) == 0 && meat4pork(300))
-			buy(1, $item[detuned radio]);
+			retrieve_item(1, $item[detuned radio]);
 		if(accordion && available_amount($item[toy accordion]) == 0 && meat4pork(150))
 			retrieve_item(1, $item[toy accordion]);
 		if(sealtooth && available_amount($item[seal tooth]) == 0) {
@@ -378,8 +378,8 @@ void visit_toot() {
 	if(vars["newLife_SellPorkForStuff"].to_boolean()) {
 		if(item_amount($item[pork elf goodies sack]) > 0 && good($item[pork elf goodies sack]))
 			use(1, $item[pork elf goodies sack]);
-		if(item_amount($item[baconstone]) + item_amount($item[hamethyst]) + item_amount($item[porquoise]) > 0)
-			buy_stuff();
+		if(item_amount($item[baconstone]) + item_amount($item[hamethyst]) + item_amount($item[porquoise]) + my_meat() > 0)
+			get_stuff();
 	}
 }
 
