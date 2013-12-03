@@ -26,6 +26,7 @@ string myclass = my_class();
 #	primestat = $stat[mysticality];
 #	myclass = "Avatar of Jarlsberg";
 #}
+boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class For Pigs";
 
 // This is a wrapper for be_good() that contains exceptions for this script's purpose.
 // It will also contain new content that hasn't yet made it to zlib's be_good() function since I'm impatient to make a new release.
@@ -155,7 +156,7 @@ void set_choice_adventures() {
 		set_choice(149, 2, "McMillicancuddy's Farm: The Other Back 40");
 	}
 	// In BIG! There is no need for leveling up
-	if(my_path() == "BIG!") {
+	if(skipStatNCs) {
 		set_choice("oceanDestination", "ignore", "At the Poop Deck: Skip the wheel");
 	} else {
 		set_choice("oceanDestination", my_primestat().to_lower_case(), "At the Poop Deck: take the Wheel and Sail to "+my_primestat()+" stats");
@@ -168,7 +169,7 @@ void set_choice_adventures() {
 		set_choice(73, 1, "Whitey's Grove: Get Muscle stats");
 		set_choice(74, 2, "Whitey's Grove: Get boxes of wine");
 		set_choice(75, 2, "Whitey's Grove: Get white lightning");
-		if(my_path() == "BIG!")  // No need to level up in BIG!
+		if(skipStatNCs)  // No need to level up in BIG!
 			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
 		else
 			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery");
@@ -176,6 +177,8 @@ void set_choice_adventures() {
 		set_choice(87, 2, "");
 		if(my_path() == "BIG!")
 			set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
+		else if(my_path() == "Class Act II: A Class For Pigs" && vars["newLife_FightBedstands"] == "true")
+			set_choice(82, 3, "Bedroom, One Nightstand (White): Fight!");
 		else
 			set_choice(82, 2, "Bedroom, One Nightstand (White): Get Muscle stats");
 		if(vars["newLife_FightBedstands"] == "true" || my_path() == "Way of the Surprising Fist")
@@ -225,7 +228,7 @@ void set_choice_adventures() {
 			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery for Bugbears");
 		else
 			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
-		if(my_path() == "Bees Hate You" || my_path() == "BIG!")
+		if(my_path() == "Bees Hate You" || skipStatNCs)
 			set_choice(85, 5, "Bedroom, One Nightstand (Wooden): Get Ballroom key, then fight the Jilted Mistress");
 		else
 			set_choice(85, 4, "Bedroom, One Nightstand (Wooden): Get Ballroom key, then get Moxie stats");
@@ -239,10 +242,10 @@ void set_choice_adventures() {
 			set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
 			set_choice(83, 1, "Bedroom, One Nightstand (Mahogany): Get old coin purse");
 		}
-		if(my_path() == "BIG!")  // No need to level up in BIG!
+		if(skipStatNCs)  // No need to level up in BIG!
 			set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		else
-			set_choice(90, 2, "Ballroom Curtains: get moxie");
+			set_choice(90, 2, "Ballroom Curtains: get Moxie stats");
 		set_choice(184, 1, "That Explains all the Eyepatches in Barrrney's Barrr: fight a pirate");
 		set_choice(186, 3, "A Test of Testarrrsterone in Barrrney's Barrr: get lots of Moxie"); 
 		set_choice(191, 1, "F'c'le, Chatterboxing: get Moxie stats");
@@ -253,7 +256,7 @@ void set_choice_adventures() {
 	}
 	if(vars["newLife_SetupGuyMadeOfBees"].to_boolean())
 		set_choice(105, 3, "Bathroom, Having a Medicine Ball: Say, \"Guy made of Bees.\"");
-	else if(primestat == $stat[mysticality] && my_path() != "BIG!")
+	else if(primestat == $stat[mysticality] && !skipStatNCs)
 		set_choice(105, 1, "Bathroom, Having a Medicine Ball: Get Mysticality stats");
 	else {
 		set_choice(105, 2, "Bathroom, Having a Medicine Ball: Skip adventure");
@@ -427,7 +430,7 @@ void equip_stuff() {
 	else if(primestat == $stat[Moxie])
 		gear += " -melee";
 	// Unarmed combat or require shield?
-	if(have_skill($skill[Master of the Surprising Fist]) && have_skill($skill[Kung Fu Hustler]) && available_amount($item[Operation Patriot Shield]) < 1)
+	if(!have_skill($skill[Summon Smithsness]) && have_skill($skill[Master of the Surprising Fist]) && have_skill($skill[Kung Fu Hustler]) && available_amount($item[Operation Patriot Shield]) < 1)
 		gear +=" -weapon -offhand";  // Barehanded can be BEST at level 1!
 	else if(use_shield())
 		gear +=" +shield";
@@ -549,9 +552,11 @@ void special(boolean bonus_actions) {
 			if(!knoll_available() && pull_it($item[Loathing Legion knife]))
 				cli_execute("fold Loathing Legion universal screwdriver");
 		} else {
-			if(pull_it($item[Loathing Legion knife])) cli_execute("fold Loathing Legion necktie");
+			if(my_path() != "KOLHS, Class Act II: A Class For Pigs" && pull_it($item[Loathing Legion knife]))
+				cli_execute("fold Loathing Legion necktie");
 			if(pull_it($item[Juju Mojo Mask])) equip($slot[acc2],$item[Juju Mojo Mask]);
-			pull_it($item[Greatest American Pants]);
+			if(!pull_it($item[Greatest American Pants]))
+				pull_it($item[Pantsgiving]);
 			// Offhand: Use Jarlsberg's Pan if mainstat is Myst. For other mainstat or no Pan, use OPS
 			if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
 				pull_it($item[Operation Patriot Shield]);
