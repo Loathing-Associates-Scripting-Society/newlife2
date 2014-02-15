@@ -12,7 +12,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 }
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
-Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs] contains my_path())
+Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, Avatar of Sneaky Pete, 17] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
 	exit;
@@ -22,10 +22,10 @@ Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg
 // It's no longer necessary for "Avatar of Boris" however I may need it in the future.
 stat primestat = my_primestat();
 string myclass = my_class();
-#if(my_path() == "12") {
-#	primestat = $stat[mysticality];
-#	myclass = "Avatar of Jarlsberg";
-#}
+if(my_path() == "17") {
+	primestat = $stat[moxie];
+	myclass = "Avatar of Sneaky Pete";
+}
 boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class For Pigs";
 
 // This is a wrapper for be_good() that contains exceptions for this script's purpose.
@@ -91,6 +91,7 @@ void set_choice_adventures() {
 	set_choice(15, 4, "eXtreme Slope: Complete the Outfit (mittens or scarf)");
 	set_choice(16, 4, "eXtreme Slope: Complete the Outfit (scarf or pants)");
 	set_choice(17, 4, "eXtreme Slope: Complete the Outfit (mittens or pants)");
+	#set_choice(575, 2, "eXtreme Slope, Duffel on the Double: Frostigkraut");
 	set_choice(182, 4, "Fantasy Airship: Get the model airship");
 	set_choice(134, 1, "Wheel in the Pyramid: Put wheel on spoke and turn it");
 	set_choice(135, 1, "Wheel in the Pyramid: Turn Wheel");
@@ -192,6 +193,7 @@ void set_choice_adventures() {
 		set_choice(402, 1, "Bathroom, Don't Hold a Grudge: Get Muscle stats");
 		set_choice(141, 2, "Hippies on the Verge of War, Blockin' Out the Scenery: Get rations");
 		set_choice(145, 1, "Frats on the Verge of War, Fratacombs: Get Muscle stats");
+		set_choice(793, 1, "Take Muscle vacation.");
 		break;
 	case $stat[mysticality]:
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
@@ -219,6 +221,7 @@ void set_choice_adventures() {
 		set_choice(402, 2, "Bathroom, Don't Hold a Grudge: Get Mysticality stats");
 		set_choice(141, 1, "Hippies on the Verge of War, Blockin' Out the Scenery: Get Mysticality stats");
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
+		set_choice(793, 2, "Take Mysticality vacation.");
 		break;
 	case $stat[moxie]:
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
@@ -252,6 +255,7 @@ void set_choice_adventures() {
 		set_choice(402, 3, "Bathroom, Don't Hold a Grudge: Get Moxie stats");
 		set_choice(141, 2, "Hippies on the Verge of War, Blockin' Out the Scenery: Get rations");
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
+		set_choice(793, 3, "Take Moxie vacation.");
 		break;
 	}
 	if(vars["newLife_SetupGuyMadeOfBees"].to_boolean())
@@ -426,9 +430,9 @@ void equip_stuff() {
 		gear += ", mp regen";
 	// Ensure correct type of weapon
 	if(primestat == $stat[Muscle])
-		gear += " +melee";
+		gear += " +0.5 melee";
 	else if(primestat == $stat[Moxie])
-		gear += " -melee";
+		gear += " -0.5 melee";
 	// Unarmed combat or require shield?
 	if(!have_skill($skill[Summon Smithsness]) && have_skill($skill[Master of the Surprising Fist]) && have_skill($skill[Kung Fu Hustler]) && available_amount($item[Operation Patriot Shield]) < 1)
 		gear +=" -weapon -offhand";  // Barehanded can be BEST at level 1!
@@ -565,9 +569,11 @@ void special(boolean bonus_actions) {
 				pull_it($item[ice sickle]);
 			if(available_amount($item[astral shirt]) < 1 && have_skill($skill[Torso Awaregness]))
 				pull_it($item[cane-mail shirt]);
+			if(have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
+				cli_execute("bjornify El Vibrato Megadrone");
 			// Best Hat? Jarlsberg comes with all the hat he needs
 			if(my_path() != "Avatar of Jarlsberg") {
-				if(have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Crown of Thrones]))
+				if(available_amount($item[Buddy Bjorn]) < 1 && have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Crown of Thrones]))
 					cli_execute("enthrone El Vibrato Megadrone");
 				else if(pull_it($item[Boris's Helm]))
 					cli_execute("fold Boris's Helm (askew)");
