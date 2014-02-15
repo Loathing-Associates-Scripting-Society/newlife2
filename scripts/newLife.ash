@@ -45,6 +45,7 @@ boolean good(string it) {
 		if(it == "seal tooth") return false;
 		break;
 	case "Avatar of Jarlsberg":
+	case "Avatar of Sneaky Pete": case "17":
 		if(it.to_familiar() != $familiar[none] || it == "familiar") return false;
 		break;
 	}
