@@ -499,7 +499,7 @@ void path_skills(boolean always_learn) {
 			for t from 1 to 3
 				for i from 1 to 10
 					visit_url("da.php?whichtree="+t+"&action=borisskill");
-			vprint("You are filled with all of Boris' skills and ready to use them.", "blue", 3);
+			vprint("You are filled with all of Boris' skills and are ready to use them.", "blue", 3);
 		}
 		break;
 	case "Zombie Slayer":
@@ -522,15 +522,23 @@ void path_skills(boolean always_learn) {
 		}
 		break;
 	case "Avatar of Jarlsberg":
-		string jarl = visit_url("da.php?place=gate2");
-		matcher unassigned = create_matcher("have (\\d+) skill points", jarl);
-		if(unassigned.find() && unassigned.group(1).to_int() > 31) {
+		matcher jarlskills = create_matcher("have (\\d+) skill points", visit_url("da.php?place=gate2"));
+		if(jarlskills.find() && jarlskills.group(1).to_int() > 31) {
 			foreach sk in $skills[Boil, Conjure Eggs, Conjure Dough, Fry, Coffeesphere, Egg Man, Early Riser, The Most Important Meal,
 			  Conjure Vegetables, Chop, Slice, Lunch Like a King, Oilsphere, Radish Horse, Conjure Cheese, Working Lunch,
 			  Bake, Conjure Potato, Conjure Meat Product, Grill, Gristlesphere, Food Coma, Hippotatomous, Never Late for Dinner,
 			  Conjure Fruit, Freeze, Conjure Cream, Cream Puff, Chocolatesphere, Best Served Cold, Nightcap, Blend]
 				visit_url("jarlskills.php?action=getskill&getskid="+to_int(sk));
 			vprint("You are filled with all of Jarlsberg's skills, now get cooking!", "blue", 3);
+		}
+		break;
+	case "Avatar of Sneaky Pete":
+		matcher peteskills = create_matcher("<b>(\\d+)</b> skill points available", visit_url("da.php?place=gate3"));
+		if(peteskills.find() && peteskills.group(1).to_int() > 29) {
+			for t from 1 to 3
+				for i from 1 to 10
+					visit_url("choice.php?whichchoice=867&pwd&option="+t);
+			vprint("You are filled with all of Sneaky Pete's skills, so hit the St.", "blue", 3);
 		}
 		break;
 	}
