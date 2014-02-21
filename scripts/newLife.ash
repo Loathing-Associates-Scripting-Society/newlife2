@@ -539,7 +539,7 @@ void path_skills(boolean always_learn) {
 				for i from 1 to 10
 					visit_url("choice.php?whichchoice=867&pwd&option="+t);
 			vprint("You are filled with all of Sneaky Pete's skills, so hit the St.", "blue", 3);
-		}
+		} else visit_url("main.php");
 		break;
 	}
 }
