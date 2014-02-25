@@ -539,7 +539,7 @@ void path_skills(boolean always_learn) {
 				for i from 1 to 10
 					visit_url("choice.php?whichchoice=867&pwd&option="+t);
 			vprint("You are filled with all of Sneaky Pete's skills, so hit the St.", "blue", 3);
-		} else visit_url("main.php");
+		}
 		break;
 	}
 }
@@ -574,7 +574,7 @@ void special(boolean bonus_actions) {
 			if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
 				pull_it($item[Operation Patriot Shield]);
 			// Get a weapon, only if none is in inventory already
-			if(item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
+			if(my_primestat() != $stat[Moxie] && !have_skill($skill[Summon Smithsness]) && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
 				pull_it($item[ice sickle]);
 			if(available_amount($item[astral shirt]) < 1 && have_skill($skill[Torso Awaregness]))
 				pull_it($item[cane-mail shirt]);
