@@ -12,14 +12,14 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 }
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
-Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, Avatar of Sneaky Pete, 17] contains my_path())
+Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, Avatar of Sneaky Pete] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
 	exit;
 }
 
 // Often I get this script out before full mafia support. Hence these variable are necessary.
-// It's no longer necessary for "Avatar of Boris" however I may need it in the future.
+// It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
 string myclass = my_class();
 if(my_path() == "17") {
@@ -294,7 +294,7 @@ void campground(boolean softBoo) {
 	  && vars["newLife_UseNewbieTent"].to_boolean();
 	// If the player is in Hardcore Nation it is time to send a "Please brick me" announcement!
 	// I only announce it if I am ascending hardcore. Silly, but that's me.
-	if( (in_hardcore() || !softBoo) & (tent || my_turncount() < 1) && get_clan_id() == 41543) {  // 41543 is the ID for HCN
+	if( (in_hardcore() || !softBoo) && (tent || my_turncount() < 1) && get_clan_id() == 41543) {  // 41543 is the ID for HCN
 		chat_clan(now_to_string("MM/dd/yyyy hh:mm aaa") + " - Welcome Back to the Kingdom of Loathing. Noob.");
 		// Pause for a suitable bricking window.
 		if(tent) {
@@ -535,9 +535,8 @@ void path_skills(boolean always_learn) {
 	case "Avatar of Sneaky Pete":
 		matcher peteskills = create_matcher("<b>(\\d+)</b> skill points available", visit_url("da.php?place=gate3"));
 		if(peteskills.find() && peteskills.group(1).to_int() > 29) {
-			for t from 1 to 3
-				for i from 1 to 10
-					visit_url("choice.php?whichchoice=867&pwd&option="+t);
+			for t from 4 to 6 // Options to Get all 10!
+				visit_url("choice.php?whichchoice=867&pwd&option="+t);
 			vprint("You are filled with all of Sneaky Pete's skills, so hit the St.", "blue", 3);
 		}
 		break;
@@ -577,7 +576,8 @@ void special(boolean bonus_actions) {
 			if(my_primestat() != $stat[Moxie] && !have_skill($skill[Summon Smithsness]) && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
 				pull_it($item[ice sickle]);
 			if(available_amount($item[astral shirt]) < 1 && have_skill($skill[Torso Awaregness]))
-				pull_it($item[cane-mail shirt]);
+				if(!pull_it($item[Sneaky Pete's leather jacket]) && !pull_it($item[Sneaky Pete's leather jacket (collar popped)]))
+					pull_it($item[cane-mail shirt]);
 			if(have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
 				cli_execute("bjornify El Vibrato Megadrone");
 			// Best Hat? Jarlsberg comes with all the hat he needs
