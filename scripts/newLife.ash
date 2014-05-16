@@ -12,7 +12,8 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 }
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
-Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, Avatar of Sneaky Pete] contains my_path())
+Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
+Avatar of Sneaky Pete, Slow and Steady] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
 	exit;
@@ -48,6 +49,11 @@ boolean good(string it) {
 	case "Avatar of Sneaky Pete": case "17":
 		if(it.to_familiar() != $familiar[none] || it == "familiar") return false;
 		break;
+	case "Slow and Steady":
+		// Don't pull old stuff listed im special()
+		if($strings[Juju Mojo Mask, Greatest American Pants, Operation Patriot Shield, ice sickle, Crown of Thrones, cane-mail shirt,
+			moveable feast, little box of fireworks, plastic pumpkin bucket] contains it) return false;
+		break;
 	}
 	return be_good(it);
 }
@@ -82,7 +88,10 @@ void set_choice_adventures() {
 	set_choice(79, 1, "");
 	set_choice(80, 99, "Library, Rise of the House of Spookyraven: Unlock stairs");
 	set_choice(451, 3, "Greater-than Sign: Get plus sign");
-	set_choice(84, 3, "Bedroom, One Nightstand (Ornate): Get spectacles");
+	set_choice(877, 6, "Bedroom, Mahogany Nightstand: Skip");
+	set_choice(878, 3, "Bedroom, Ornate Nightstand: Get spectacles");
+	set_choice(879, 5, "Bedroom, Rustic Nightstand: Get Ballroom key, then Moxie");
+	set_choice(880, 1, "Bedroom, Elegant Nightstand: Get Lady Spookyraven's finest gown");
 	set_choice(106, 2, "Ballroom song: Non-combat");
 	set_choice(523, 4, "Defiled Cranny: Fight swarm of ghoul whelps");
 	set_choice(22, 4, "Pirate's Cove: Complete the Outfit (eyepatch or pants)");
@@ -175,18 +184,11 @@ void set_choice_adventures() {
 			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
 		else
 			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery");
-		set_choice(85, 5, "Bedroom, One Nightstand (Wooden): Get Ballroom key, then fight the Jilted Mistress");
 		set_choice(87, 2, "");
-		if(my_path() == "BIG!")
-			set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
-		else if(my_path() == "Class Act II: A Class For Pigs" && vars["newLife_FightBedstands"] == "true")
-			set_choice(82, 3, "Bedroom, One Nightstand (White): Fight!");
+		if(skipStatNCs)
+			set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		else
-			set_choice(82, 2, "Bedroom, One Nightstand (White): Get Muscle stats");
-		if(vars["newLife_FightBedstands"] == "true" || my_path() == "Way of the Surprising Fist")
-			set_choice(83, 2, "Bedroom, One Nightstand (Mahogany): Fight!");
-		else 
-			set_choice(83, 1, "Bedroom, One Nightstand (Mahogany): Get old coin purse");
+			set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
 		set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		set_choice(184, 1, "That Explains all the Eyepatches in Barrrney's Barrr: fight a pirate");
 		set_choice(186, 1, "A Test of Testarrrsterone in Barrrney's Barrr: get stats");
@@ -204,17 +206,7 @@ void set_choice_adventures() {
 			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery for Bugbears");
 		else
 			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
-		set_choice(85, 5, "Bedroom, One Nightstand (Wooden): Get Ballroom key, then fight the Jilted Mistress");
-		if(vars["newLife_FightBedstands"] == "true" || my_path() == "Way of the Surprising Fist") {
-			if(my_path() == "BIG!")
-				set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
-			else
-				set_choice(82, 3, "Bedroom, One Nightstand (White): Fight!");
-			set_choice(83, 2, "Bedroom, One Nightstand (Mahogany): Fight!");
-		} else {
-			set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
-			set_choice(83, 1, "Bedroom, One Nightstand (Mahogany): Get old coin purse");
-		}
+		set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		set_choice(184, 2, "That Explains all the Eyepatches in Barrrney's Barrr: shot of rotgut");
 		set_choice(186, 1, "A Test of Testarrrsterone in Barrrney's Barrr: get stats");
@@ -232,20 +224,7 @@ void set_choice_adventures() {
 			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery for Bugbears");
 		else
 			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
-		if(my_path() == "Bees Hate You" || skipStatNCs)
-			set_choice(85, 5, "Bedroom, One Nightstand (Wooden): Get Ballroom key, then fight the Jilted Mistress");
-		else
-			set_choice(85, 4, "Bedroom, One Nightstand (Wooden): Get Ballroom key, then get Moxie stats");
-		if(vars["newLife_FightBedstands"] == "true" || my_path() == "Way of the Surprising Fist") {
-			if(my_path() == "BIG!")
-				set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
-			else
-				set_choice(82, 3, "Bedroom, One Nightstand (White): Fight!");
-			set_choice(83, 2, "Bedroom, One Nightstand (Mahogany): Fight!");
-		} else {
-			set_choice(82, 1, "Bedroom, One Nightstand (White): Get old leather wallet");
-			set_choice(83, 1, "Bedroom, One Nightstand (Mahogany): Get old coin purse");
-		}
+		set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		if(skipStatNCs)  // No need to level up in BIG!
 			set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		else
@@ -532,8 +511,9 @@ void path_skills(boolean always_learn) {
 	case "Avatar of Sneaky Pete":
 		matcher peteskills = create_matcher("<b>(\\d+)</b> skill points available", visit_url("da.php?place=gate3"));
 		if(peteskills.find() && peteskills.group(1).to_int() > 29) {
-			for t from 4 to 6 // Options to Get all 10!
-				visit_url("choice.php?whichchoice=867&pwd&option="+t);
+			visit_url("choice.php?whichchoice=867&pwd&option=4"); // All 10 Loveable Rogue
+			visit_url("choice.php?whichchoice=867&pwd&option=5"); // All 10 Motorcycle Guy
+			visit_url("choice.php?whichchoice=867&pwd&option=6"); // All 10 Dangerous Rebel
 			vprint("You are filled with all of Sneaky Pete's skills, so hit the St.", "blue", 3);
 		}
 		break;
