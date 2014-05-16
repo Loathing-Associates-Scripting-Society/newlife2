@@ -86,13 +86,14 @@ void set_choice_adventures() {
 	set_choice(77, 2, "Billiards Room: Get Library Key");
 	set_choice(78, 1, "");
 	set_choice(79, 1, "");
-	set_choice(80, 99, "Library, Rise of the House of Spookyraven: Unlock stairs");
-	set_choice(451, 3, "Greater-than Sign: Get plus sign");
+	set_choice(888, 4, "Library, Rise of the House of Spookyraven: Ignore");
+	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
 	set_choice(877, 6, "Bedroom, Mahogany Nightstand: Skip");
 	set_choice(878, 3, "Bedroom, Ornate Nightstand: Get spectacles");
 	set_choice(879, 5, "Bedroom, Rustic Nightstand: Get Ballroom key, then Moxie");
 	set_choice(880, 1, "Bedroom, Elegant Nightstand: Get Lady Spookyraven's finest gown");
 	set_choice(106, 2, "Ballroom song: Non-combat");
+	set_choice(451, 3, "Greater-than Sign: Get plus sign");
 	set_choice(523, 4, "Defiled Cranny: Fight swarm of ghoul whelps");
 	set_choice(22, 4, "Pirate's Cove: Complete the Outfit (eyepatch or pants)");
 	set_choice(23, 4, "Pirate's Cove: Complete the Outfit (eyepatch or parrot)");
@@ -180,11 +181,6 @@ void set_choice_adventures() {
 		set_choice(73, 1, "Whitey's Grove: Get Muscle stats");
 		set_choice(74, 2, "Whitey's Grove: Get boxes of wine");
 		set_choice(75, 2, "Whitey's Grove: Get white lightning");
-		if(skipStatNCs)  // No need to level up in BIG!
-			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
-		else
-			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery");
-		set_choice(87, 2, "");
 		if(skipStatNCs)
 			set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		else
@@ -202,10 +198,6 @@ void set_choice_adventures() {
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
 		set_choice(74, 2, "Whitey's Grove: Get boxes of wine");
 		set_choice(75, 1, "Whitey's Grove: Get Mysticality stats");
-		if(my_path() == "Bugbear Invasion")
-			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery for Bugbears");
-		else
-			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
 		set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		set_choice(184, 2, "That Explains all the Eyepatches in Barrrney's Barrr: shot of rotgut");
@@ -220,10 +212,6 @@ void set_choice_adventures() {
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
 		set_choice(74, 1, "Whitey's Grove: Get Moxie stats");
 		set_choice(75, 2, "Whitey's Grove: Get white lightning");
-		if(my_path() == "Bugbear Invasion")
-			set_choice(81, 1, "Library, Fall of the House of Spookyraven: Open Gallery for Bugbears");
-		else
-			set_choice(81, 99, "Library, Fall of the House of Spookyraven: Unlock stairs");
 		set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		if(skipStatNCs)  // No need to level up in BIG!
 			set_choice(90, 3, "Ballroom Curtains: skip adventure");
