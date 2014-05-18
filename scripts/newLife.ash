@@ -50,9 +50,7 @@ boolean good(string it) {
 		if(it.to_familiar() != $familiar[none] || it == "familiar") return false;
 		break;
 	case "Slow and Steady":
-		// Don't pull old stuff listed im special()
-		if($strings[Juju Mojo Mask, Greatest American Pants, Operation Patriot Shield, ice sickle, Crown of Thrones, cane-mail shirt,
-			moveable feast, little box of fireworks, plastic pumpkin bucket] contains it) return false;
+		if(!is_unrestricted(it)) return false;
 		break;
 	}
 	return be_good(it);
