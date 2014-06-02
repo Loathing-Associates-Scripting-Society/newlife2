@@ -73,7 +73,7 @@ void set_choice(int adventure, int choice, string purpose) {
 void set_choice_adventures() {
 	// These choices are sometimes changed during an ascension, so make certain that they are changed back.
 	// No need for comments on each line because the last parameter explains what each choice adventure does.
-	set_choice("louvreDesiredGoal", 7, "Haunted Gallery: Gain mainstat");
+	set_choice("louvreDesiredGoal", 7, "Haunted Gallery: Get Lady Spookyraven's dancing shoes");
 	set_choice(89, 6, "Haunted Gallery: Ignore 'Out in the Garden'");
 	set_choice(502, 2, "Spooky Forest: Get the mosquito");
 	set_choice(505, 1, "");
@@ -88,7 +88,10 @@ void set_choice_adventures() {
 	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
 	set_choice(877, 6, "Bedroom, Mahogany Nightstand: Skip");
 	set_choice(878, 3, "Bedroom, Ornate Nightstand: Get spectacles");
-	set_choice(879, 5, "Bedroom, Rustic Nightstand: Get Ballroom key, then Moxie");
+	if(my_path() == "Bees Hate You")
+		set_choice(879, 3, "Bedroom, Rustic Nightstand: Fight Mistress for Antique Mirror");
+	else
+		set_choice(879, 6, "Bedroom, Rustic Nightstand: Skip");
 	set_choice(880, 1, "Bedroom, Elegant Nightstand: Get Lady Spookyraven's finest gown");
 	set_choice(106, 2, "Ballroom song: Non-combat");
 	set_choice(451, 3, "Greater-than Sign: Get plus sign");
