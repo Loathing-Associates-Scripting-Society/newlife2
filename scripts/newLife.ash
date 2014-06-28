@@ -46,14 +46,11 @@ boolean good(string it) {
 		if(it == "seal tooth") return false;
 		break;
 	case "Avatar of Jarlsberg":
-	case "Avatar of Sneaky Pete": case "17":
+	case "Avatar of Sneaky Pete":
 		if(it.to_familiar() != $familiar[none] || it == "familiar") return false;
 		break;
-	case "Slow and Steady":
-		if(!is_unrestricted(it)) return false;
-		break;
 	}
-	return be_good(it);
+	return is_unrestricted(it) && be_good(it);
 }
 
 void set_choice(string adventure, string choice, string purpose) {
@@ -73,17 +70,13 @@ void set_choice(int adventure, int choice, string purpose) {
 void set_choice_adventures() {
 	// These choices are sometimes changed during an ascension, so make certain that they are changed back.
 	// No need for comments on each line because the last parameter explains what each choice adventure does.
-	set_choice("louvreDesiredGoal", 7, "Haunted Gallery: Get Lady Spookyraven's dancing shoes");
-	set_choice(89, 6, "Haunted Gallery: Ignore 'Out in the Garden'");
 	set_choice(502, 2, "Spooky Forest: Get the mosquito");
 	set_choice(505, 1, "");
 	set_choice(507, 1, "");
 	set_choice(112, 2, "Harold's Hammer is suboptimal");
 	set_choice(4, 3, "No poultrygeist is needed");
-	set_choice(25, 3, "Dungeon of Doom: Don't buy a mimic"); // No longer optimal
-	set_choice(77, 2, "Billiards Room: Get Library Key");
-	set_choice(78, 1, "");
-	set_choice(79, 1, "");
+	set_choice(25, 3, "Dungeon of Doom: Don't buy a mimic");
+	set_choice(875, 1, "Billiards Room: Play Pool");
 	set_choice(888, 4, "Library, Rise of the House of Spookyraven: Ignore");
 	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
 	set_choice(877, 6, "Bedroom, Mahogany Nightstand: Skip");
@@ -94,6 +87,9 @@ void set_choice_adventures() {
 		set_choice(879, 6, "Bedroom, Rustic Nightstand: Skip");
 	set_choice(880, 1, "Bedroom, Elegant Nightstand: Get Lady Spookyraven's finest gown");
 	set_choice(106, 2, "Ballroom song: Non-combat");
+	set_choice(89, 6, "Haunted Gallery: Ignore 'Out in the Garden'");
+	set_choice("louvreDesiredGoal", 7, "Haunted Gallery: Get Lady Spookyraven's dancing shoes");
+	set_choice("lightsOutAutomation", 1, "Lights Out at Spookyraven Manor: Free adventures FTW!");
 	set_choice(451, 3, "Greater-than Sign: Get plus sign");
 	set_choice(523, 4, "Defiled Cranny: Fight swarm of ghoul whelps");
 	set_choice(22, 4, "Pirate's Cove: Complete the Outfit (eyepatch or pants)");
