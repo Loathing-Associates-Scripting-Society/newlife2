@@ -79,6 +79,7 @@ void set_choice_adventures() {
 	set_choice(875, 1, "Billiards Room: Play Pool");
 	set_choice(888, 4, "Library, Rise of the House of Spookyraven: Ignore");
 	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
+	set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 	set_choice(877, 6, "Bedroom, Mahogany Nightstand: Skip");
 	set_choice(878, 3, "Bedroom, Ornate Nightstand: Get spectacles");
 	if(my_path() == "Bees Hate You")
@@ -178,10 +179,6 @@ void set_choice_adventures() {
 		set_choice(73, 1, "Whitey's Grove: Get Muscle stats");
 		set_choice(74, 2, "Whitey's Grove: Get boxes of wine");
 		set_choice(75, 2, "Whitey's Grove: Get white lightning");
-		if(skipStatNCs)
-			set_choice(876, 6, "Bedroom, White Nightstand: Skip");
-		else
-			set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
 		set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		set_choice(184, 1, "That Explains all the Eyepatches in Barrrney's Barrr: fight a pirate");
 		set_choice(186, 1, "A Test of Testarrrsterone in Barrrney's Barrr: get stats");
@@ -195,7 +192,6 @@ void set_choice_adventures() {
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
 		set_choice(74, 2, "Whitey's Grove: Get boxes of wine");
 		set_choice(75, 1, "Whitey's Grove: Get Mysticality stats");
-		set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		set_choice(184, 2, "That Explains all the Eyepatches in Barrrney's Barrr: shot of rotgut");
 		set_choice(186, 1, "A Test of Testarrrsterone in Barrrney's Barrr: get stats");
@@ -209,7 +205,6 @@ void set_choice_adventures() {
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
 		set_choice(74, 1, "Whitey's Grove: Get Moxie stats");
 		set_choice(75, 2, "Whitey's Grove: Get white lightning");
-		set_choice(876, 6, "Bedroom, White Nightstand: Skip");
 		if(skipStatNCs)  // No need to level up in BIG!
 			set_choice(90, 3, "Ballroom Curtains: skip adventure");
 		else
@@ -418,6 +413,10 @@ void handle_starting_items() {
 	foreach it in $items[astral hot dog dinner, astral six-pack, carton of astral energy drinks,
 	  box of bear arms]
 		if(item_amount(it) > 0 && good(it)) use(item_amount(it), it);
+		
+	// Open up Spookyraven Manor
+	if(item_amount($item[telegram from Lady Spookyraven]) > 0 && good($item[telegram from Lady Spookyraven]))
+		use(1, $item[telegram from Lady Spookyraven]);
 
 	// Put on the best stuff you've got.
 	vprint("Put on your best gear.", "olive", 3);
