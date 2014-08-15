@@ -13,7 +13,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady] contains my_path())
+Avatar of Sneaky Pete, Slow and Steady, 19, Heavy Rains] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
 	exit;
