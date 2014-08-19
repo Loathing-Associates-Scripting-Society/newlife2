@@ -281,25 +281,32 @@ void get_bugged_balaclava() {
 	}
 }
 
-boolean need_accordion() {
-	// ATs come with a stolen accordion and ability to steal more
-	if(my_class() == $class[Accordion Thief]) return false;
-	if(item_amount($item[toy accordion]) > 0 || !good($item[toy accordion]))
-		return false;
-	// Can the character cast a skill that needs an accordion? (Unlimited skills only!)
-	foreach s in $skills[]
-		if(have_skill(s) && s.class == $class[Accordion Thief] && s.buff == true && s.dailylimit < 0)
-			return true;
-	return false;
-}
-
 void get_stuff() {
-	boolean meat4pork(int price) {
-		if(my_meat() >= price) return true;
-		if(item_amount($item[baconstone]) > 0) return autosell(1, $item[baconstone]);
-		if(item_amount($item[hamethyst])  > 0) return autosell(1, $item[hamethyst]);
-		if(item_amount($item[porquoise])  > 0) return autosell(1, $item[porquoise]);
+	boolean need_accordion() {
+		// ATs come with a stolen accordion and ability to steal more
+		if(my_class() != $class[Accordion Thief] && item_amount($item[toy accordion]) == 0 && available_amount($item[antique accordion]) == 0 && good($item[toy accordion]))
+			foreach s in $skills[]
+				if(have_skill(s) && s.class == $class[Accordion Thief] && s.buff == true && s.dailylimit < 0)
+					return true; 	// Only need an accordion if the character can cast a AT skill (Unlimited skills only!)
 		return false;
+	}
+
+	boolean meat4pork(item it) {
+		if(my_meat() < npc_price(it)) {
+			if(item_amount($item[baconstone]) > 0) autosell(1, $item[baconstone]);
+			else if(item_amount($item[hamethyst])  > 0) autosell(1, $item[hamethyst]);
+			else if(item_amount($item[porquoise])  > 0) autosell(1, $item[porquoise]);
+		}
+		return my_meat() >= npc_price(it);
+	}
+	
+	string trade_pork4item(item it) {
+		if(available_amount(it) == 0) {
+			if(meat4pork(it) && retrieve_item(1, it))
+				return to_string(it);
+			print("Failed to acquire a " + it, "red");
+		}
+		return "";
 	}
 	
 	boolean worthless() {
@@ -307,30 +314,42 @@ void get_stuff() {
 			if(available_amount(i.to_item()) > 0) return true;
 		return false;
 	}
+	
+	// a is the new string, cat is the contatenated final string
+	string add_string(string a, string cat) {
+		if(cat == "")
+			return a;
+		if(a == "")
+			return cat;
+		if(cat.contains_text(" and a "))
+			return a + ", "+ cat;
+		return a + " and a "+ cat;
+	}
 
-	if(good($item[chewing gum on a string])) {
-		boolean accordion = need_accordion();
-		// For disco bandits, Suckerpunch is better than seal tooth
-		boolean sealtooth = my_class() != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]);
-		boolean radio = knoll_available() && item_amount($item[detuned radio]) == 0 && good($item[detuned radio]);
-		int q = to_int(accordion) + to_int(sealtooth) + to_int(radio);
-		string garner;
-		if(accordion) garner  = "toy accordion" + (q == 3? ", ": q == 2? " and a ": "");
-		if(sealtooth) garner += "seal tooth"       + (radio? " and a ": "");
-		if(radio)     garner += "detuned radio";
-		if(garner != "")
-			vprint("Pork Elf stones are being autosold now to garner a "+garner+".", "blue", 3);
-		if(radio && item_amount($item[detuned radio]) == 0 && meat4pork(300))
-			retrieve_item(1, $item[detuned radio]);
-		if(accordion && available_amount($item[toy accordion]) == 0 && meat4pork(150))
-			retrieve_item(1, $item[toy accordion]);
-		if(sealtooth && available_amount($item[seal tooth]) == 0) {
-			while(!worthless() && meat4pork(50))
-				use(1, $item[chewing gum on a string]);
-			if(worthless() && (available_amount($item[hermit permit]) > 0 || meat4pork(100)))
-				hermit(1, $item[seal tooth]);
+	string garner;
+	
+	if(need_accordion())
+		garner = trade_pork4item($item[toy accordion]);
+		
+	if(knoll_available() && good($item[detuned radio]))
+		garner = trade_pork4item($item[seal tooth]).add_string(garner);
+	
+	// Need miniature life preserver in Heavy Rains
+	if(my_path() == "Heavy Rains")
+		garner = trade_pork4item($item[miniature life preserver]).add_string(garner);
+	
+	// For disco bandits, Suckerpunch is better than seal tooth
+	if(my_class() != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && good($item[chewing gum on a string])) {
+		while(!worthless() && meat4pork($item[chewing gum on a string]))
+			use(1, $item[chewing gum on a string]);
+		if(worthless() && (available_amount($item[hermit permit]) > 0 || meat4pork($item[hermit permit]))) {
+			hermit(1, $item[seal tooth]);
+			garner = "seal tooth".add_string(garner);
 		}
 	}
+
+	if(garner != "")
+		vprint("Pork Elf stones were sold to garner a "+garner+".", "blue", 3);
 }
 
 // Visit Mt. Noob to get pork gems.
@@ -371,7 +390,7 @@ familiar start_familiar() {
 	if(my_path() == "Zombie Slayer" && have_familiar($familiar[Hovering Skull]))
 		return $familiar[Hovering Skull];
 	
-	foreach f in $familiars[He-Boulder, Frumious Bandersnatch, Baby Bugged Bugbear, Bloovian Groose, Gluttonous Green Ghost, 
+	foreach f in $familiars[He-Boulder, Frumious Bandersnatch, Baby Bugged Bugbear, Grim Brother, Bloovian Groose, Gluttonous Green Ghost, 
 	  Spirit Hobo, Fancypants Scarecrow, Ancient Yuletide Troll, Cheshire Bat, Cymbal-Playing Monkey, Nervous Tick, 
 	  Hunchbacked Minion, Uniclops, Chauvinist Pig, Dramatic Hedgehog, Blood-Faced Volleyball, Reagnimated Gnome, 
 	  Jill-O-Lantern, Hovering Sombrero]
@@ -552,7 +571,7 @@ void special(boolean bonus_actions) {
 		}
 		if(pull_it($item[can of Rain-Doh])) use(1, $item[can of Rain-Doh]);
 		// Select best familiar item if familiars can be used
-		if(good("familiar") && available_amount($item[astral pet sweater]) < 1)
+		if(good("familiar") && available_amount($item[astral pet sweater]) < 1 && my_path() != "Heavy Rains")
 			(pull_it($item[moveable feast]) || pull_it($item[snow suit]) || pull_it($item[little box of fireworks]) || pull_it($item[plastic pumpkin bucket]));
 		equip_stuff();
 	}
