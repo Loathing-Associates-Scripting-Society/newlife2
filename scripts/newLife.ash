@@ -332,7 +332,7 @@ void get_stuff() {
 		garner = trade_pork4item($item[toy accordion]);
 		
 	if(knoll_available() && good($item[detuned radio]))
-		garner = trade_pork4item($item[seal tooth]).add_string(garner);
+		garner = trade_pork4item($item[detuned radio]).add_string(garner);
 	
 	// Need miniature life preserver in Heavy Rains
 	if(my_path() == "Heavy Rains")
@@ -433,10 +433,6 @@ void handle_starting_items() {
 	  box of bear arms]
 		if(item_amount(it) > 0 && good(it)) use(item_amount(it), it);
 		
-	// Open up Spookyraven Manor
-	if(item_amount($item[telegram from Lady Spookyraven]) > 0 && good($item[telegram from Lady Spookyraven]))
-		use(1, $item[telegram from Lady Spookyraven]);
-
 	// Put on the best stuff you've got.
 	vprint("Put on your best gear.", "olive", 3);
 	// First equip best familiar!
