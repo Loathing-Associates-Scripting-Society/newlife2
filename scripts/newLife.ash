@@ -7,7 +7,7 @@ import "zlib.ash";
 
 if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != "" 
   && user_confirm("The script has just been updated!\nWould you like to quit now and manually resume execution so that you can use the current version?")) {
-	print("New Life aborted to complete update. Please run newLife.ash to finish setting up your current ascension.", "red");
+	vprint("New Life aborted to complete update. Please run newLife.ash to finish setting up your current ascension.", -1);
 	exit;
 }
 
@@ -15,7 +15,7 @@ if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way o
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
 Avatar of Sneaky Pete, Slow and Steady, 19, Heavy Rains] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
-	print("Your current path is unknown to this script! A new version of this script should be released very soon.", "red");
+	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
 }
 
@@ -304,7 +304,7 @@ void get_stuff() {
 		if(available_amount(it) == 0) {
 			if(meat4pork(it) && retrieve_item(1, it))
 				return to_string(it);
-			print("Failed to acquire a " + it, "red");
+			vprint("Failed to acquire a " + it, -3);
 		}
 		return "";
 	}
@@ -316,7 +316,7 @@ void get_stuff() {
 	}
 	
 	// a is the new string, cat is the contatenated final string
-	string add_string(string a, string cat) {
+	string and_string(string a, string cat) {
 		if(cat == "")
 			return a;
 		if(a == "")
@@ -332,11 +332,11 @@ void get_stuff() {
 		garner = trade_pork4item($item[toy accordion]);
 		
 	if(knoll_available() && good($item[detuned radio]))
-		garner = trade_pork4item($item[detuned radio]).add_string(garner);
+		garner = trade_pork4item($item[detuned radio]).and_string(garner);
 	
 	// Need miniature life preserver in Heavy Rains
 	if(my_path() == "Heavy Rains")
-		garner = trade_pork4item($item[miniature life preserver]).add_string(garner);
+		garner = trade_pork4item($item[miniature life preserver]).and_string(garner);
 	
 	// For disco bandits, Suckerpunch is better than seal tooth
 	if(my_class() != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && good($item[chewing gum on a string])) {
@@ -344,7 +344,7 @@ void get_stuff() {
 			use(1, $item[chewing gum on a string]);
 		if(worthless() && (available_amount($item[hermit permit]) > 0 || meat4pork($item[hermit permit]))) {
 			hermit(1, $item[seal tooth]);
-			garner = "seal tooth".add_string(garner);
+			garner = "seal tooth".and_string(garner);
 		}
 	}
 
@@ -400,24 +400,45 @@ familiar start_familiar() {
 }
 
 void equip_stuff() {
-	string gear = "mainstat, 0.2 hp, 0.2 dr, 0.2 familiar weight, 0.1 spell damage, -equip sugar shield, 4 ";
-	gear += my_primestat() + " experience";
+	buffer gear;
+	gear.append("mainstat, 0.2 hp, 0.2 dr, 0.1 spell damage, 4 ");
+	gear.append(my_primestat());
+	gear.append(" experience");
 	if(my_path() != "Zombie Slayer")
-		gear += ", mp regen";
+		gear.append(", mp regen");
+	if(good("familiar"))
+		gear.append(", 0.2 familiar weight");
+	if(available_amount($item[sugar shield]) > 0)
+		gear.append(" -equip sugar shield");
+	
 	// Ensure correct type of weapon
 	if(primestat == $stat[Muscle])
-		gear += " +0.5 melee";
+		gear.append(" +0.5 melee");
 	else if(primestat == $stat[Moxie])
-		gear += " -0.5 melee";
+		gear.append(" -0.5 melee");
+	
 	// Unarmed combat or require shield?
 	if(!have_skill($skill[Summon Smithsness]) && have_skill($skill[Master of the Surprising Fist]) && have_skill($skill[Kung Fu Hustler]) && available_amount($item[Operation Patriot Shield]) < 1)
-		gear +=" -weapon -offhand";  // Barehanded can be BEST at level 1!
+		gear.append(" -weapon -offhand");  // Barehanded can be BEST at level 1!
 	else if(use_shield())
-		gear +=" +shield";
-	if(my_path() == "Bees Hate You")
-		gear += ", 0 beeosity";
-	else if(my_path() == "KOLHS" || my_path() == "15")
-		gear+= " -hat";
+		gear.append(" +shield");
+	
+	// Things to not equip for specific path
+	switch(my_path()) {
+	case "Bees Hate You":
+		gear.append(", 0 beeosity");
+		break;
+	case "KOLHS":
+		gear.append(" -hat");
+		break;
+	case "Heavy Rains":
+		if(available_amount($item[miniature life preserver]) > 0) {
+			equip($item[miniature life preserver]);
+			lock_familiar_equipment(true);
+			gear.append(" -familiar");
+		}
+		break;
+	}
 	maximize(gear, false);
 }
 
@@ -546,8 +567,10 @@ void special(boolean bonus_actions) {
 			if(!pull_it($item[Greatest American Pants]))
 				pull_it($item[Pantsgiving]);
 			// Offhand: Use Jarlsberg's Pan if mainstat is Myst. For other mainstat or no Pan, use OPS
+			/*   Actually the whole category of Off-hand items is secondary to Smithsness now. Commenting this out.
 			if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
 				pull_it($item[Operation Patriot Shield]);
+			*/
 			// Get a weapon, only if none is in inventory already
 			if(my_primestat() != $stat[Moxie] && !have_skill($skill[Summon Smithsness]) && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
 				pull_it($item[ice sickle]);
@@ -597,7 +620,7 @@ void new_ascension() {
 	}
 	check_breakfast();
 	cli_execute("outfit save Backup");  // Accidently equiping Backup after ascending cases error. No more oops.
-	print("Welcome to your new life as a "+myclass+"!", "green");
+	vprint("Welcome to your new life as a "+myclass+"!", "green", 3);
 }
 
 // These are default values here. To change for each character, edit their vars file in /data direcory or use the zlib commands.
