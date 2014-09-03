@@ -292,10 +292,20 @@ void get_stuff() {
 	}
 
 	boolean meat4pork(item it) {
+		// In case you want to use Thor's Pliers to smith Black Gold with a pork gem, preseve one the best for your class. Organize list to cause that.
+		boolean [item] gem_list() {
+			if(primestat == $stat[muscle]) return $items[hamethyst, porquoise, baconstone];
+			if(primestat == $stat[moxie])  return $items[baconstone, hamethyst, porquoise];
+			return $items[baconstone, porquoise, hamethyst]; // This is Myst
+		}
+		
 		if(my_meat() < npc_price(it)) {
-			if(item_amount($item[baconstone]) > 0) autosell(1, $item[baconstone]);
-			else if(item_amount($item[hamethyst])  > 0) autosell(1, $item[hamethyst]);
-			else if(item_amount($item[porquoise])  > 0) autosell(1, $item[porquoise]);
+			item [int] pork;
+			foreach gem in gem_list()
+				if(item_amount(gem) > 0) pork [count(pork)] = gem;
+			if(count(pork) == 0) return false;
+			sort pork by - item_amount(value);
+			autosell(1, pork[0]);  // Sell the gem with the greatest quantity
 		}
 		return my_meat() >= npc_price(it);
 	}
@@ -555,7 +565,8 @@ void special(boolean bonus_actions) {
 	vprint("Now for a few things that "+my_name()+" wants to do.", "blue", 3);
 	if(available_amount($item[detuned radio]) > 0 || canadia_available())
 		change_mcd(10 + canadia_available().to_int());
-	// In softcore I want to pull this stuff
+	
+	// In softcore I want to pull stuff
 	if(!in_hardcore()) {
 		if(my_path() == "BIG!") {  // Most pulls involve leveling up, so BIG is very different!
 			if(!knoll_available() && pull_it($item[Loathing Legion knife]))
@@ -564,21 +575,27 @@ void special(boolean bonus_actions) {
 			if(my_path() != "KOLHS, Class Act II: A Class For Pigs" && pull_it($item[Loathing Legion knife]))
 				cli_execute("fold Loathing Legion necktie");
 			if(pull_it($item[Juju Mojo Mask])) equip($slot[acc2],$item[Juju Mojo Mask]);
-			if(!pull_it($item[Greatest American Pants]))
-				pull_it($item[Pantsgiving]);
+			
+			// Pull Pants!
+			(pull_it($item[Greatest American Pants]) || pull_it($item[Pantsgiving]));
+			
 			// Offhand: Use Jarlsberg's Pan if mainstat is Myst. For other mainstat or no Pan, use OPS
-			/*   Actually the whole category of Off-hand items is secondary to Smithsness now. Commenting this out.
-			if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
-				pull_it($item[Operation Patriot Shield]);
-			*/
-			// Get a weapon, only if none is in inventory already
-			if(my_primestat() != $stat[Moxie] && !have_skill($skill[Summon Smithsness]) && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
-				pull_it($item[ice sickle]);
-			if(available_amount($item[astral shirt]) < 1 && have_skill($skill[Torso Awaregness]))
-				if(!pull_it($item[Sneaky Pete's leather jacket]) && !pull_it($item[Sneaky Pete's leather jacket (collar popped)]))
-					pull_it($item[cane-mail shirt]);
+			if(!have_skill($skill[Summon Smithsness]))
+				if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
+					pull_it($item[Operation Patriot Shield]);
+			
+			// Get a weapon, only if none is in inventory already and you don't have Smithsness
+			if(!have_skill($skill[Summon Smithsness]) && my_primestat() != $stat[Moxie] && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
+				(pull_it($item[Thor's Pliers]) || pull_it($item[ice sickle]));
+			
+			// Shirt
+			if(have_skill($skill[Torso Awaregness]) && available_amount($item[astral shirt]) < 1)
+				(pull_it($item[Sneaky Pete's leather jacket]) || pull_it($item[Sneaky Pete's leather jacket (collar popped)]) || pull_it($item[cane-mail shirt]));
+			
+			// Back
 			if(have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
 				cli_execute("bjornify El Vibrato Megadrone");
+			
 			// Best Hat? Jarlsberg comes with all the hat he needs
 			if(my_path() != "Avatar of Jarlsberg") {
 				if(available_amount($item[Buddy Bjorn]) < 1 && have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Crown of Thrones]))
@@ -588,12 +605,18 @@ void special(boolean bonus_actions) {
 				else pull_it($item[Boris's Helm (askew)]);
 			}
 		}
-		if(pull_it($item[can of Rain-Doh])) use(1, $item[can of Rain-Doh]);
+		
+		// Ultimate Combat Item
+		if(available_amount($item[empty Rain-Doh can]) == 0 && pull_it($item[can of Rain-Doh]))
+			use(1, $item[can of Rain-Doh]);
+		
 		// Select best familiar item if familiars can be used
 		if(good("familiar") && available_amount($item[astral pet sweater]) < 1 && my_path() != "Heavy Rains")
 			(pull_it($item[moveable feast]) || pull_it($item[snow suit]) || pull_it($item[little box of fireworks]) || pull_it($item[plastic pumpkin bucket]));
+		
 		equip_stuff();
 	}
+	
 	cli_execute("mood default");
 }
 
