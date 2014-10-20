@@ -79,13 +79,14 @@ void set_choice_adventures() {
 	set_choice(875, 1, "Billiards Room: Play Pool");
 	set_choice(888, 4, "Library, Rise of the House of Spookyraven: Ignore");
 	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
-	set_choice(876, 6, "Bedroom, White Nightstand: Skip");
-	set_choice(877, 6, "Bedroom, Mahogany Nightstand: Skip");
+	set_choice(877, 1, "Bedroom, Mahogany Nightstand: old coin purse");
 	set_choice(878, 3, "Bedroom, Ornate Nightstand: Get spectacles");
 	if(my_path() == "Bees Hate You")
 		set_choice(879, 3, "Bedroom, Rustic Nightstand: Fight Mistress for Antique Mirror");
+	else if(primestat == $stat[Moxie])
+		set_choice(879, 1, "Bedroom, Rustic Nightstand: Get Moxie Stats");
 	else
-		set_choice(879, 6, "Bedroom, Rustic Nightstand: Skip");
+		set_choice(879, 2, "Bedroom, Rustic Nightstand: Get grouchy restless spirit");
 	set_choice(880, 1, "Bedroom, Elegant Nightstand: Get Lady Spookyraven's finest gown");
 	set_choice(106, 2, "Ballroom song: Non-combat");
 	set_choice(89, 6, "Haunted Gallery: Ignore 'Out in the Garden'");
@@ -187,6 +188,7 @@ void set_choice_adventures() {
 		set_choice(141, 2, "Hippies on the Verge of War, Blockin' Out the Scenery: Get rations");
 		set_choice(145, 1, "Frats on the Verge of War, Fratacombs: Get Muscle stats");
 		set_choice(793, 1, "Take Muscle vacation.");
+		set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
 		break;
 	case $stat[mysticality]:
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
@@ -200,6 +202,7 @@ void set_choice_adventures() {
 		set_choice(141, 1, "Hippies on the Verge of War, Blockin' Out the Scenery: Get Mysticality stats");
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
 		set_choice(793, 2, "Take Mysticality vacation.");
+		set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
 		break;
 	case $stat[moxie]:
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
@@ -216,6 +219,7 @@ void set_choice_adventures() {
 		set_choice(141, 2, "Hippies on the Verge of War, Blockin' Out the Scenery: Get rations");
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
 		set_choice(793, 3, "Take Moxie vacation.");
+		set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
 		break;
 	}
 	if(vars["newLife_SetupGuyMadeOfBees"].to_boolean())
@@ -476,7 +480,7 @@ void handle_starting_items() {
 
 void recovery_settings() {
 	// Optimal restoration settings for level 1. These will need to be changed by level 4
-		set_choice("hpAutoRecovery", "0.25", "Resetting HP/MP restoration settings to minimal");
+		set_choice("hpAutoRecovery", "0.30", "Resetting HP/MP restoration settings to minimal");
 		set_choice("hpAutoRecoveryTarget", "0.95", "");
 		set_choice("manaBurningTrigger", "-0.05", "");
 		set_choice("manaBurningThreshold", "0.80", "");
