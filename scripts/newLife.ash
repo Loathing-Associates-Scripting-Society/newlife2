@@ -13,7 +13,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, 19, Heavy Rains] contains my_path())
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -248,8 +248,10 @@ void set_choice_adventures() {
 
 void campground(boolean softBoo) {
 	// Break the hippy stone?
-	if(vars["newLife_SmashHippyStone"] == "true" && !hippy_stone_broken() && good("Hippy Stone"))
+	if(vars["newLife_SmashHippyStone"] == "true" && !hippy_stone_broken() && good("Hippy Stone")) {
+		vprint("Smashing that hippy-dippy crap so you can have some violent fun!", "olive", 3);
 		visit_url("campground.php?confirm=on&smashstone=Yep.&pwd");
+	}
 	
 	if(get_dwelling() != $item[big rock])
 		return;  // If dwelling is something other than a big rock, we're done here.
@@ -583,13 +585,15 @@ void special(boolean bonus_actions) {
 			// Pull Pants!
 			(pull_it($item[Greatest American Pants]) || pull_it($item[Pantsgiving]));
 			
+			boolean bearArms = my_path() == "Zombie Slayer" && (available_amount($item[right bear arm]) > 0 && available_amount($item[left bear arm]) > 0 || available_amount($item[box of bear arms]) > 0);
+			
 			// Offhand: Use Jarlsberg's Pan if mainstat is Myst. For other mainstat or no Pan, use OPS
-			if(!have_skill($skill[Summon Smithsness]))
+			if(!(have_skill($skill[Summon Smithsness]) || bearArms))
 				if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
 					pull_it($item[Operation Patriot Shield]);
 			
 			// Get a weapon, only if none is in inventory already and you don't have Smithsness
-			if(!have_skill($skill[Summon Smithsness]) && my_primestat() != $stat[Moxie] && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
+			if(!(have_skill($skill[Summon Smithsness]) || bearArms) && my_primestat() != $stat[Moxie] && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
 				(pull_it($item[Thor's Pliers]) || pull_it($item[ice sickle]));
 			
 			// Shirt
@@ -652,7 +656,6 @@ void new_ascension() {
 
 // These are default values here. To change for each character, edit their vars file in /data direcory or use the zlib commands.
 setvar("newLife_SetupGuyMadeOfBees", FALSE); // If you like to set up the guy made of bees set this TRUE. 
-setvar("newLife_FightBedstands", FALSE);	// If this is set to TRUE, you'll prefer fighting Bedstands to getting meat. (Note that mainstat is still better than fighting.)
 setvar("newLife_SmashHippyStone", FALSE);	// Smash stone if you want to break it at level 1 for some PvPing!
 setvar("newLife_UseNewbieTent", TRUE);		// Use newbie tent if you don't want togive your clannes a fair shot at bricking you in the face!
 setvar("newLife_SellPorkForStuff", TRUE);	// Sell pork gems to purchase detuned radio, toy accordion & seal tooth
