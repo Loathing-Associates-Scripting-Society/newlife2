@@ -13,7 +13,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky] contains my_path())
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, 22, Standard] contains my_path())
   && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -131,6 +131,12 @@ void set_choice_adventures() {
 	set_choice(783, 1, "An Overgrown Shrine (Southwest)");
 	set_choice(785, 1, "An Overgrown Shrine (Northeast)");
 	set_choice(787, 1, "An Overgrown Shrine (Southeast)");
+	// For NS'15
+	set_choice(923, 1, "Black Forest, Head to the Blackberry patch");
+	set_choice(924, 3, "Black Forest, Get beehive");
+	set_choice(1018, 1, "Black Forest, Get beehive");
+	set_choice(1019, 1, "Black Forest, Get beehive");
+	set_choice(1026, 2, "Giant's Castle, Get electric boning knife");
 	
 	// Path specific choices
 	if(my_path() == "Way of the Surprising Fist")
