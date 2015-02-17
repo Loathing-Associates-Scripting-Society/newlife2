@@ -13,8 +13,8 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, 22, Standard] contains my_path())
-  && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying] 
+  contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
 }
@@ -33,25 +33,39 @@ boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class
 // It will also contain new content that hasn't yet made it to zlib's be_good() function since I'm impatient to make a new release.
 boolean good(string it) {
 	switch(my_path()) {
-	case "Way of the Surprising Fist":
-		// Don't autosell in Way of the Surprising Fist
-		if($strings[pork elf goodies sack, baconstone, hamethyst, porquoise, chewing gum on a string] contains it) return false;
-		break;
 	case "Avatar of Boris":
-		// Boris needs no wussy stasis. Boris also needs to save meat for an antique instrument
-		if($strings[seal tooth, detuned radio, familiar] contains it) return false;
-		break;
-	case "Zombie Slayer":
-		// Zombie Masters don't have hermit access
-		if(it == "seal tooth") return false;
-		break;
 	case "Avatar of Jarlsberg":
 	case "Avatar of Sneaky Pete":
-		if(it.to_familiar() != $familiar[none] || it == "familiar") return false;
+	case "Actually Ed the Undying":
+		if(it == "familiar") return false;
 		break;
 	}
-	return is_unrestricted(it) && be_good(it);
+	return be_good(it);
 }
+
+boolean good(item it) {
+	switch(my_path()) {
+	case "Way of the Surprising Fist": // Don't autosell in Way of the Surprising Fist
+		if($items[pork elf goodies sack, baconstone, hamethyst, porquoise, chewing gum on a string] contains it) return false;
+		break;
+	case "Avatar of Boris": // Boris needs no wussy stasis. Boris also needs to save meat for an antique instrument
+		if($items[seal tooth, detuned radio] contains it) return false;
+		break;
+	case "Zombie Slayer":
+		if(it == $item[seal tooth]) return false; // Zombie Masters don't have hermit access
+		break;
+	case "Actually Ed the Undying":  // Ed has no campground
+		if(it == $item[Newbiesport&trade; tent]) return false;
+		break;
+	}
+	return be_good(it);
+}
+
+boolean good(familiar f) {
+	if(my_path() == "Actually Ed the Undying") return false;  // remove this line later when zlib is updated
+	return be_good(f); 
+}
+
 
 void set_choice(string adventure, string choice, string purpose) {
 	if(get_property(adventure) != choice) {
@@ -378,8 +392,11 @@ void get_stuff() {
 void visit_toot() {
 	vprint("The Oriole welcomes you back at Mt. Noob.", "olive", 3);
 	visit_url("tutorial.php?action=toot&pwd");
-	if(item_amount($item[letter from King Ralph XI]) > 0 && good($item[letter from King Ralph XI]))
-		use(1, $item[letter from King Ralph XI]);
+	item letter = $item[letter from King Ralph XI];
+	if(my_path() == "Actually Ed the Undying")
+		letter = $item[letter to Ed the Undying];
+	if(item_amount(letter) > 0 && good(letter))
+		use(1, letter);
 	if(vars["newLife_SellPorkForStuff"].to_boolean()) {
 		if(item_amount($item[pork elf goodies sack]) > 0 && good($item[pork elf goodies sack]))
 			use(1, $item[pork elf goodies sack]);
@@ -486,12 +503,17 @@ void handle_starting_items() {
 	equip_stuff();
 }
 
+// Optimal restoration settings for level 1. These will need to be changed by level 4
 void recovery_settings() {
-	// Optimal restoration settings for level 1. These will need to be changed by level 4
+	// Ed needs no wussy healing
+	if(my_path() == "Actually Ed the Undying") {
+		set_choice("hpAutoRecovery", "-0.05", "Don't bother with healing");
+		set_choice("hpAutoRecoveryTarget", "-0.05", "");
+	} else {
 		set_choice("hpAutoRecovery", "0.30", "Resetting HP/MP restoration settings to minimal");
 		set_choice("hpAutoRecoveryTarget", "0.95", "");
-		set_choice("manaBurningTrigger", "-0.05", "");
-		set_choice("manaBurningThreshold", "0.80", "");
+	}
+	
 	// Zombie Slayers have an alternative to using mana
 	if(my_path() == "Zombie Slayer") {
 		if(get_property("baleUr_ZombieAuto") != "")
@@ -505,6 +527,8 @@ void recovery_settings() {
 		set_choice("mpAutoRecoveryTarget", "0.0", "");
 	}
 	
+	set_choice("manaBurningTrigger", "-0.05", "");
+	set_choice("manaBurningThreshold", "0.80", "");
 }
 
 // If you are completely full of Boris or Braaaaains, this will get all the skills
@@ -558,6 +582,8 @@ void path_skills(boolean always_learn) {
 			visit_url("choice.php?whichchoice=867&pwd&option=6"); // All 10 Dangerous Rebel
 			vprint("You are filled with all of Sneaky Pete's skills, so hit the St.", "blue", 3);
 		}
+		break;
+	case "Actually Ed the Undying":
 		break;
 	}
 }
