@@ -139,18 +139,27 @@ void set_choice_adventures() {
 	set_choice(676, 0, "Raver Giant's Room: Manual");
 	set_choice(677, 0, "Steam Punk Giant's Room: Manual");
 	set_choice(678, 0, "Punk Rock Giant's Room: Manual");
-	set_choice(679, 1, "Spin That Wheel, Giants Get Real");
+	if(my_path() == "Actually Ed the Undying")
+		set_choice(679, 2, "Ed Spins That Wheel, Giants Get Real");
+	else
+		set_choice(679, 1, "Spin That Wheel, Giants Get Real");
 	// Hidden City!
 	set_choice(781, 1, "An Overgrown Shrine (Northwest)");
 	set_choice(783, 1, "An Overgrown Shrine (Southwest)");
 	set_choice(785, 1, "An Overgrown Shrine (Northeast)");
 	set_choice(787, 1, "An Overgrown Shrine (Southeast)");
 	// For NS'15
-	set_choice(923, 1, "Black Forest, Head to the Blackberry patch");
-	set_choice(924, 3, "Black Forest, Get beehive");
-	set_choice(1018, 1, "Black Forest, Get beehive");
-	set_choice(1019, 1, "Black Forest, Get beehive");
-	set_choice(1026, 2, "Giant's Castle, Get electric boning knife");
+	if(my_path() == "Actually Ed the Undying") { // Ed Doesn't work the NS Tower
+		set_choice(923, 1, "Black Forest, Head to the Blackberry patch");
+		set_choice(924, 1, "Black Forest, Head to the Blackberry patch");
+		set_choice(1026, 3, "Ed has no need for an electric boning knife");
+	} else {
+		set_choice(923, 1, "Black Forest, Head to the Blackberry patch");
+		set_choice(924, 3, "Black Forest, Get beehive");
+		set_choice(1018, 1, "Black Forest, Get beehive");
+		set_choice(1019, 1, "Black Forest, Get beehive");
+		set_choice(1026, 2, "Giant's Castle, Get electric boning knife");
+	}
 	
 	// Path specific choices
 	if(my_path() == "Way of the Surprising Fist")
