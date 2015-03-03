@@ -593,6 +593,12 @@ void path_skills(boolean always_learn) {
 		}
 		break;
 	case "Actually Ed the Undying":
+		matcher edskills = create_matcher("You may memorize (\\d+) more pages", visit_url("place.php?whichplace=edbase&action=edbase_book"));
+		if(edskills.find() && edskills.group(1).to_int() > 20) {
+			for skillid from 0 to 20
+				visit_url("choice.php?whichchoice=1051&option=1&pwd&skillid=" + skillid);
+			vprint("Go forth and wreck just Vengeance upon "+my_name()+" with all your Skills, thus sayeth the Book of the Undying.", "blue", 3);
+		}
 		break;
 	}
 }
