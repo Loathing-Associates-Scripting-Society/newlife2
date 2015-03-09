@@ -36,8 +36,10 @@ boolean good(string it) {
 	case "Avatar of Boris":
 	case "Avatar of Jarlsberg":
 	case "Avatar of Sneaky Pete":
-	case "Actually Ed the Undying":
 		if(it == "familiar") return false;
+		break;
+	case "Actually Ed the Undying":
+		if(it == "familiar"|| it == "Hippy Stone") return false;
 		break;
 	}
 	return be_good(it);
@@ -651,19 +653,29 @@ void special(boolean bonus_actions) {
 			if(have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
 				cli_execute("bjornify El Vibrato Megadrone");
 			
-			// Best Hat? Jarlsberg comes with all the hat he needs
-			if(my_path() != "Avatar of Jarlsberg") {
+			// Best Hat? Jarlsberg comes with all the hat he needs and some other paths auto-pull their Path Hat
+			if(my_path() != "Avatar of Jarlsberg" && available_amount($item[The Crown of Ed the Undying]) < 1 && available_amount($item[Boris's Helm]) < 1 && available_amount($item[Boris's Helm (askew)]) < 1) {
 				if(available_amount($item[Buddy Bjorn]) < 1 && have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Crown of Thrones]))
 					cli_execute("enthrone El Vibrato Megadrone");
 				else if(pull_it($item[Boris's Helm]))
 					cli_execute("fold Boris's Helm (askew)");
-				else pull_it($item[Boris's Helm (askew)]);
+				else if(!pull_it($item[Boris's Helm (askew)]))
+					pull_it($item[The Crown of Ed the Undying]);
 			}
 		}
 		
 		// Ultimate Combat Item
 		if(available_amount($item[empty Rain-Doh can]) == 0 && pull_it($item[can of Rain-Doh]))
 			use(1, $item[can of Rain-Doh]);
+
+		// Adjust Crown of Ed to +20 ML
+		if(available_amount($item[The Crown of Ed the Undying]) > 0) {
+			if(equipped_amount($item[The Crown of Ed the Undying]) > 0)
+				visit_url("inventory.php?action=activateedhat");
+			else
+				visit_url("inv_use.php?pwd&which=2&whichitem=8185");
+			visit_url("choice.php?whichchoice=1063&option=4");
+		}
 		
 		// Select best familiar item if familiars can be used
 		if(good("familiar") && available_amount($item[astral pet sweater]) < 1 && my_path() != "Heavy Rains")
