@@ -3,6 +3,7 @@
 
 script "newLife.ash"
 notify "Bale";
+since r15561; // Edpiece support
 import "zlib.ash";
 
 if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != "" 
@@ -22,10 +23,10 @@ Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually E
 // Often I get this script out before full mafia support. Hence these variable are necessary.
 // It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
-string myclass = my_class();
+class myclass = my_class();
 if(my_path() == "17") {
 	primestat = $stat[moxie];
-	myclass = "Avatar of Sneaky Pete";
+	myclass = $class[Avatar of Sneaky Pete];
 }
 boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class For Pigs";
 
@@ -201,7 +202,7 @@ void set_choice_adventures() {
 	if(skipStatNCs) {
 		set_choice("oceanDestination", "ignore", "At the Poop Deck: Skip the wheel");
 	} else {
-		set_choice("oceanDestination", my_primestat().to_lower_case(), "At the Poop Deck: take the Wheel and Sail to "+my_primestat()+" stats");
+		set_choice("oceanDestination", primestat.to_lower_case(), "At the Poop Deck: take the Wheel and Sail to "+primestat+" stats");
 	}
 	
 	// Prime Stat specific choices
@@ -321,7 +322,7 @@ void get_bugged_balaclava() {
 void get_stuff() {
 	boolean need_accordion() {
 		// ATs come with a stolen accordion and ability to steal more
-		if(my_class() != $class[Accordion Thief] && item_amount($item[toy accordion]) == 0 && available_amount($item[antique accordion]) == 0 && good($item[toy accordion]))
+		if(myclass != $class[Accordion Thief] && item_amount($item[toy accordion]) == 0 && available_amount($item[antique accordion]) == 0 && good($item[toy accordion]))
 			foreach s in $skills[]
 				if(have_skill(s) && s.class == $class[Accordion Thief] && s.buff == true && s.dailylimit < 0)
 					return true; 	// Only need an accordion if the character can cast a AT skill (Unlimited skills only!)
@@ -386,7 +387,7 @@ void get_stuff() {
 		garner = trade_pork4item($item[miniature life preserver]).and_string(garner);
 	
 	// For disco bandits, Suckerpunch is better than seal tooth
-	if(my_class() != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && good($item[chewing gum on a string])) {
+	if(myclass != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && good($item[chewing gum on a string])) {
 		while(!worthless() && meat4pork($item[chewing gum on a string]))
 			use(1, $item[chewing gum on a string]);
 		if(worthless() && (available_amount($item[hermit permit]) > 0 || meat4pork($item[hermit permit]))) {
@@ -451,8 +452,8 @@ familiar start_familiar() {
 
 void equip_stuff() {
 	buffer gear;
-	gear.append("mainstat, 0.2 hp, 0.2 dr, 0.1 spell damage, 4 ");
-	gear.append(my_primestat());
+	gear.append("0.2 mainstat, 0.2 hp, 0.2 dr, 0.1 spell damage, 4 ");
+	gear.append(primestat);
 	gear.append(" experience");
 	if(my_path() != "Zombie Slayer")
 		gear.append(", mp regen");
@@ -511,7 +512,6 @@ void handle_starting_items() {
 	if(fam == $familiar[none] || !good(fam) || !have_familiar(fam))
 		fam = start_familiar();
 	use_familiar(fam);
-	equip_stuff();
 }
 
 // Optimal restoration settings for level 1. These will need to be changed by level 4
@@ -638,11 +638,11 @@ void special(boolean bonus_actions) {
 			
 			// Offhand: Use Jarlsberg's Pan if mainstat is Myst. For other mainstat or no Pan, use OPS
 			if(!(have_skill($skill[Summon Smithsness]) || bearArms))
-				if(my_primestat() != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
+				if(primestat != $stat[mysticality] || !(pull_it($item[Jarlsberg's pan]) || pull_it($item[Jarlsberg's pan (Cosmic portal mode)])))
 					pull_it($item[Operation Patriot Shield]);
 			
 			// Get a weapon, only if none is in inventory already and you don't have Smithsness
-			if(!(have_skill($skill[Summon Smithsness]) || bearArms) && my_primestat() != $stat[Moxie] && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
+			if(!(have_skill($skill[Summon Smithsness]) || bearArms) && primestat != $stat[Moxie] && item_amount($item[astral mace]) + item_amount($item[astral bludgeon]) + item_amount($item[right bear arm]) < 1)
 				(pull_it($item[Thor's Pliers]) || pull_it($item[ice sickle]));
 			
 			// Shirt
@@ -664,24 +664,13 @@ void special(boolean bonus_actions) {
 			}
 		}
 		
-		// Ultimate Combat Item
-		if(available_amount($item[empty Rain-Doh can]) == 0 && pull_it($item[can of Rain-Doh]))
-			use(1, $item[can of Rain-Doh]);
-
-		// Adjust Crown of Ed to +20 ML
-		if(available_amount($item[The Crown of Ed the Undying]) > 0) {
-			if(equipped_amount($item[The Crown of Ed the Undying]) > 0)
-				visit_url("inventory.php?action=activateedhat");
-			else
-				visit_url("inv_use.php?pwd&which=2&whichitem=8185");
-			visit_url("choice.php?whichchoice=1063&option=4");
-		}
-		
 		// Select best familiar item if familiars can be used
 		if(good("familiar") && available_amount($item[astral pet sweater]) < 1 && my_path() != "Heavy Rains")
 			(pull_it($item[moveable feast]) || pull_it($item[snow suit]) || pull_it($item[little box of fireworks]) || pull_it($item[plastic pumpkin bucket]));
 		
-		equip_stuff();
+		// Ultimate Combat Item
+		if(available_amount($item[empty Rain-Doh can]) == 0 && pull_it($item[can of Rain-Doh]))
+			use(1, $item[can of Rain-Doh]);
 	}
 	
 	cli_execute("mood default");
@@ -707,6 +696,7 @@ void new_ascension() {
 		path_skills(extra_stuff);	// Always learn skills if true
 		handle_starting_items();
 		special(extra_stuff);		// Only executes if true
+		equip_stuff();
 	}
 	check_breakfast();
 	cli_execute("outfit save Backup");  // Accidently equiping Backup after ascending cases error. No more oops.
