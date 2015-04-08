@@ -163,6 +163,10 @@ void set_choice_adventures() {
 		set_choice(1019, 1, "Black Forest, Get beehive");
 		set_choice(1026, 2, "Giant's Castle, Get electric boning knife");
 	}
+	if(be_good($item[munchies pill]))
+		set_choice("violetFogGoal", 8, "Violet Fog is great place to get the munchies.");
+	else
+		set_choice("violetFogGoal", 0, "Violet Fog is too out of date to care about.");
 	
 	// Path specific choices
 	if(my_path() == "Way of the Surprising Fist")
@@ -497,12 +501,9 @@ void handle_starting_items() {
 	// Free pulls
 	if(good($item[brick]))
 		retrieve_item(available_amount($item[brick]), $item[brick]);
-	#if(my_path() == "Avatar of Jarlsberg" && available_amount($item[Jarlsberg's pan (Cosmic portal mode)]) < 1 && available_amount($item[Jarlsberg's pan]) > 0)
-	#	visit_url("inv_use.php?pwd&which=2&ajax=1&whichitem=6305");
 
 	// Unpack astral consumables
-	foreach it in $items[astral hot dog dinner, astral six-pack, carton of astral energy drinks,
-	  box of bear arms]
+	foreach it in $items[astral hot dog dinner, astral six-pack, carton of astral energy drinks, box of bear arms]
 		if(item_amount(it) > 0 && good(it)) use(item_amount(it), it);
 		
 	// Put on the best stuff you've got.
@@ -620,6 +621,12 @@ void special(boolean bonus_actions) {
 	vprint("Now for a few things that "+my_name()+" wants to do.", "blue", 3);
 	if(available_amount($item[detuned radio]) > 0 || canadia_available())
 		change_mcd(10 + canadia_available().to_int());
+	
+	// transmission from planet Xi -> Xiblaxian holo-wrist-puter simcode -> Xiblaxian holo-wrist-puter
+	if(available_amount($item[Xiblaxian holo-wrist-puter]) == 0 && good($item[Xiblaxian holo-wrist-puter]))
+		foreach it in $items[transmission from planet Xi, Xiblaxian holo-wrist-puter simcode]
+			if(available_amount(it) > 0 && good(it))
+				use(1, it);
 	
 	// In softcore I want to pull stuff
 	if(!in_hardcore()) {
