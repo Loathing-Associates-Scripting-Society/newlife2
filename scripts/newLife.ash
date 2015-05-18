@@ -14,7 +14,7 @@ if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != ""
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying] 
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -65,7 +65,6 @@ boolean good(item it) {
 }
 
 boolean good(familiar f) {
-	if(my_path() == "Actually Ed the Undying") return false;  // remove this line later when zlib is updated
 	return be_good(f); 
 }
 
@@ -619,7 +618,7 @@ void special(boolean bonus_actions) {
 		return true;
 	}
 	vprint("Now for a few things that "+my_name()+" wants to do.", "blue", 3);
-	if(available_amount($item[detuned radio]) > 0 || canadia_available())
+	if(available_amount($item[detuned radio]) > 0 || canadia_available() || (gnomads_available() && my_path() == "Actually Ed the Undying"))
 		change_mcd(10 + canadia_available().to_int());
 	
 	// transmission from planet Xi -> Xiblaxian holo-wrist-puter simcode -> Xiblaxian holo-wrist-puter
