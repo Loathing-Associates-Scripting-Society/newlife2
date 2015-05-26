@@ -135,7 +135,7 @@ void set_choice_adventures() {
 	set_choice(670, 0, "Fitness Giant's Room: Manual");
 	set_choice(671, 0, "Neckbeard Giant's Room: Manual");
 	set_choice(672, 3, "Possibility Giant's Room: skip adventure");
-	set_choice(673, 3, "Procrastination Giant's Room: skip adventure");
+	set_choice(673, 1, "Procrastination Giant's Room: very overdue library book");
 	set_choice(674, 3, "Renaissance Giant's Room: skip adventure");
 	set_choice(675, 0, "Goth Giant's Room: Manual");
 	set_choice(676, 0, "Raver Giant's Room: Manual");
@@ -491,6 +491,9 @@ void equip_stuff() {
 			lock_familiar_equipment(true);
 			gear.append(" -familiar");
 		}
+		break;
+	case "One Crazy Random Summer":
+		gear.append(", 5 Random Monster Attributes");
 		break;
 	}
 	maximize(gear, false);
