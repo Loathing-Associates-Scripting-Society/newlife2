@@ -60,6 +60,9 @@ boolean good(item it) {
 	case "Actually Ed the Undying":  // Ed has no campground
 		if(it == $item[Newbiesport&trade; tent]) return false;
 		break;
+	case "BIG!"
+		if($items[detuned radio] contains it) return false; // Unnecessary expense
+		break;
 	}
 	return be_good(it);
 }
