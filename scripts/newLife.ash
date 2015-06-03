@@ -3,7 +3,7 @@
 
 script "newLife.ash"
 notify "Bale";
-since r15561; // Edpiece support
+since r15892; // KoLmafia renamed "Random Monster Attribute" to "Random Monster Modifier" to match KoL's terminology
 import "zlib.ash";
 
 if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != "" 
@@ -496,7 +496,7 @@ void equip_stuff() {
 		}
 		break;
 	case "One Crazy Random Summer":
-		gear.append(", 5 Random Monster Attributes");
+		gear.append(", 5 Random Monster Modifier");
 		break;
 	}
 	maximize(gear, false);
