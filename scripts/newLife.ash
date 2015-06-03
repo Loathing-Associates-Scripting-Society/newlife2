@@ -496,7 +496,7 @@ void equip_stuff() {
 		}
 		break;
 	case "One Crazy Random Summer":
-		gear.append(", 5 Random Monster Modifier");
+		gear.append(", 5 Random Monster Modifiers");
 		break;
 	}
 	maximize(gear, false);
