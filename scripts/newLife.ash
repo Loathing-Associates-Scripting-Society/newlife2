@@ -3,18 +3,12 @@
 
 script "newLife.ash"
 notify "Bale";
-since r15892; // KoLmafia renamed "Random Monster Attribute" to "Random Monster Modifier" to match KoL's terminology
+since r16052; // KoLmafia adds +effective keyword to the Maximizer
 import "zlib.ash";
-
-if(check_version("newLife", "bale-new-life", "1.14.4", 2769) != "" 
-  && user_confirm("The script has just been updated!\nWould you like to quit now and manually resume execution so that you can use the current version?")) {
-	vprint("New Life aborted to complete update. Please run newLife.ash to finish setting up your current ascension.", -1);
-	exit;
-}
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer] 
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, 25, Community Service] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -24,10 +18,10 @@ Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually E
 // It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
 class myclass = my_class();
-if(my_path() == "17") {
-	primestat = $stat[moxie];
-	myclass = $class[Avatar of Sneaky Pete];
-}
+# if(my_path() == "17") {
+	# primestat = $stat[moxie];
+	# myclass = $class[Avatar of Sneaky Pete];
+# }
 boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class For Pigs";
 
 // This is a wrapper for be_good() that contains exceptions for this script's purpose.
@@ -458,7 +452,7 @@ familiar start_familiar() {
 
 void equip_stuff() {
 	buffer gear;
-	gear.append("0.2 mainstat, 0.2 hp, 0.2 dr, 0.1 spell damage, 4 ");
+	gear.append("0.2 mainstat, 0.2 hp, 0.2 dr, 0.1 spell damage, +effective 4 ");
 	gear.append(primestat);
 	gear.append(" experience");
 	if(my_path() != "Zombie Slayer")
@@ -467,12 +461,6 @@ void equip_stuff() {
 		gear.append(", 0.2 familiar weight");
 	if(available_amount($item[sugar shield]) > 0)
 		gear.append(" -equip sugar shield");
-	
-	// Ensure correct type of weapon
-	if(primestat == $stat[Muscle])
-		gear.append(" +0.5 melee");
-	else if(primestat == $stat[Moxie])
-		gear.append(" -0.5 melee");
 	
 	// Unarmed combat or require shield?
 	if(!have_skill($skill[Summon Smithsness]) && have_skill($skill[Master of the Surprising Fist]) && have_skill($skill[Kung Fu Hustler]) && available_amount($item[Operation Patriot Shield]) < 1)
