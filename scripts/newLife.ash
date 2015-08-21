@@ -622,7 +622,7 @@ void special(boolean bonus_actions) {
 				use(1, it);
 	
 	// In softcore I want to pull stuff
-	if(!in_hardcore()) {
+	if(!in_hardcore() && my_path() != "Community Service") {
 		if(my_path() == "BIG!") {  // Most pulls involve leveling up, so BIG is very different!
 			if(!knoll_available() && pull_it($item[Loathing Legion knife]))
 				cli_execute("fold Loathing Legion universal screwdriver");
