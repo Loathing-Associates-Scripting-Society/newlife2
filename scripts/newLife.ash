@@ -163,6 +163,10 @@ void set_choice_adventures() {
 		set_choice("violetFogGoal", 8, "Violet Fog is great place to get the munchies.");
 	else
 		set_choice("violetFogGoal", 0, "Violet Fog is too out of date to care about.");
+	// Ghost Dog
+	set_choice(1106, 2, 'Ghost Dog says, "Wooof! Wooooooof!": Get buff'); // 1 is stats, 2 is buff, 3 is Ghost Dog food
+	set_choice(1107, 1, "Play Fetch with your Ghost Dog: Get 1 tennis ball");
+	# set_choice(1108, 1, "Your Dog Found Something Again: Get food"); // 1 is food, 2 is booze
 	
 	// Path specific choices
 	if(my_path() == "Way of the Surprising Fist")
@@ -599,6 +603,16 @@ void path_skills(boolean always_learn) {
 	}
 }
 
+// If you've got a Shrine to the Barrel God, get free stuff from the barrel.
+void free_barrels() {
+	if(get_property("barrelShrineUnlocked") == "true") {
+		print("Seek free stuff from the Barrel full of Barrels since you have the Barrel god's blessing.", "blue");
+		matcher barrel = create_matcher('<div class="ex"><a class="spot" href="([^"]+)"><img title="A barrel"', visit_url("barrel.php"));
+		while(barrel.find())
+		visit_url(barrel.group(1));
+	}
+}
+
 // This is stuff I like to do, but not everyone will be happy with.
 void special(boolean bonus_actions) {
 	if(!bonus_actions) return;
@@ -695,6 +709,7 @@ void new_ascension() {
 		recovery_settings();
 		path_skills(extra_stuff);	// Always learn skills if true
 		handle_starting_items();
+		free_barrels();
 		special(extra_stuff);		// Only executes if true
 		equip_stuff();
 	}
