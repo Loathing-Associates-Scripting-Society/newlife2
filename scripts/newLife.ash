@@ -605,7 +605,7 @@ void path_skills(boolean always_learn) {
 
 // If you've got a Shrine to the Barrel God, get free stuff from the barrel.
 void free_barrels() {
-	if(get_property("barrelShrineUnlocked") == "true") {
+	if(!in_bad_moon() && get_property("barrelShrineUnlocked") == "true") {
 		print("Seek free stuff from the Barrel full of Barrels since you have the Barrel god's blessing.", "blue");
 		matcher barrel = create_matcher('<div class="ex"><a class="spot" href="([^"]+)"><img title="A barrel"', visit_url("barrel.php"));
 		while(barrel.find())
