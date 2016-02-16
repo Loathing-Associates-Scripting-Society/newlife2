@@ -8,7 +8,7 @@ import "zlib.ash";
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, 25, Community Service] 
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, Community Service, Avatar of West of Loathing] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -166,7 +166,7 @@ void set_choice_adventures() {
 	// Ghost Dog
 	set_choice(1106, 2, 'Ghost Dog says, "Wooof! Wooooooof!": Get buff'); // 1 is stats, 2 is buff, 3 is Ghost Dog food
 	set_choice(1107, 1, "Play Fetch with your Ghost Dog: Get 1 tennis ball");
-	# set_choice(1108, 1, "Your Dog Found Something Again: Get food"); // 1 is food, 2 is booze
+	set_choice(1108, my_ascensions() % 2 + 1, "Your Dog Found Something Again: Get food or booze"); // 1 is food, 2 is booze - Alternate
 	
 	// Path specific choices
 	if(my_path() == "Way of the Surprising Fist")
@@ -323,8 +323,10 @@ void get_bugged_balaclava() {
 	}
 }
 
-void get_stuff() {
+void buy_stuff() {
 	boolean need_accordion() {
+		if(my_path() == "Avatar of West of Loathing") // Cowboys don't need accordions
+			return false;
 		// ATs come with a stolen accordion and ability to steal more
 		if(myclass != $class[Accordion Thief] && item_amount($item[toy accordion]) == 0 && available_amount($item[antique accordion]) == 0 && good($item[toy accordion]))
 			foreach s in $skills[]
@@ -404,6 +406,21 @@ void get_stuff() {
 		vprint("Pork Elf stones were sold to garner a "+garner+".", "blue", 3);
 }
 
+void get_stuff() {
+	get_bugged_balaclava();
+	if(vars["newLife_SellPorkForStuff"].to_boolean()) {
+		if(item_amount($item[pork elf goodies sack]) > 0 && good($item[pork elf goodies sack]))
+			use(1, $item[pork elf goodies sack]);
+		if(item_amount($item[baconstone]) + item_amount($item[hamethyst]) + item_amount($item[porquoise]) + my_meat() > 0)
+			buy_stuff();
+	}
+	// Get your cowboy boots from the LT&T Office
+	if(get_property("telegraphOfficeAvailable") ==  "true") {
+		visit_url("place.php?whichplace=town_right&action=townright_ltt");
+		run_choice(8);
+	}
+}
+
 // Visit Mt. Noob to get pork gems.
 void visit_toot() {
 	vprint("The Oriole welcomes you back at Mt. Noob.", "olive", 3);
@@ -413,12 +430,6 @@ void visit_toot() {
 		letter = $item[letter to Ed the Undying];
 	if(item_amount(letter) > 0 && good(letter))
 		use(1, letter);
-	if(vars["newLife_SellPorkForStuff"].to_boolean()) {
-		if(item_amount($item[pork elf goodies sack]) > 0 && good($item[pork elf goodies sack]))
-			use(1, $item[pork elf goodies sack]);
-		if(item_amount($item[baconstone]) + item_amount($item[hamethyst]) + item_amount($item[porquoise]) + my_meat() > 0)
-			get_stuff();
-	}
 }
 
 boolean use_shield() {
@@ -472,7 +483,7 @@ void equip_stuff() {
 	else if(use_shield())
 		gear.append(" +shield");
 	
-	// Things to not equip for specific path
+	// Things to equip or not equip for specific path
 	switch(my_path()) {
 	case "Bees Hate You":
 		gear.append(", 0 beeosity");
@@ -609,7 +620,7 @@ void free_barrels() {
 		print("Seek free stuff from the Barrel full of Barrels since you have the Barrel god's blessing.", "blue");
 		matcher barrel = create_matcher('<div class="ex"><a class="spot" href="([^"]+)"><img title="A barrel"', visit_url("barrel.php"));
 		while(barrel.find())
-		visit_url(barrel.group(1));
+			visit_url(barrel.group(1));
 	}
 }
 
@@ -703,8 +714,8 @@ void new_ascension() {
 	boolean extra_stuff = vars["newLife_Extras"].to_boolean();  // Do extra stuff if this is true
 	set_choice_adventures();
 	campground(extra_stuff);
-	get_bugged_balaclava();
 	visit_toot();
+	get_stuff();
 	if(my_turncount() < 1) {
 		recovery_settings();
 		path_skills(extra_stuff);	// Always learn skills if true
