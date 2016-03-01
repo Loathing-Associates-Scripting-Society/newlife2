@@ -3,7 +3,7 @@
 
 script "newLife.ash"
 notify "Bale";
-since r16052; // KoLmafia adds +effective keyword to the Maximizer
+since r16754; // Track earned AWoL skill points in awolPointsBeanslinger, awolPointsCowpuncher, and awolPointsSnakeoiler
 import "zlib.ash";
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
@@ -609,6 +609,24 @@ void path_skills(boolean always_learn) {
 			for skillid from 0 to 20
 				visit_url("choice.php?whichchoice=1051&option=1&pwd&skillid=" + skillid);
 			vprint("Go forth and wreck just Vengeance upon "+my_name()+" with all your Skills, thus sayeth the Book of the Undying.", "blue", 3);
+		}
+		break;
+	case "Avatar of West of Loathing":
+		// If you have 10 skill points in a given book, learn all skills in that book
+		foreach book in $items[Tales of the West: Cow Punching, Tales of the West: Beanslinging, Tales of the West: Snake Oiling] {
+			string prop;
+			class awol = to_class(to_int(book) - 8937); // The three skill books and the classes they teach are in the same order
+			if(awol == $class[Cow Puncher]) prop = "awolPointsCowpuncher";
+			else if(awol == $class[Beanslinger]) prop = "awolPointsBeanslinger";
+			else prop = "awolPointsSnakeoiler";
+			int points = to_int(get_property(prop));
+			if(my_class() == awol)
+				points = min(max(points, 1) + my_level(), 10);
+			if(points >= 10) {
+				visit_url('inv_use.php?pwd&which=3&whichitem=' + to_int(book));
+				for sk from 0 to 9
+					visit_url("choice.php?whichchoice=" + to_string(to_int(awol) + 1159) + "&option=1&pwd&whichskill=" + sk);
+			}
 		}
 		break;
 	}
