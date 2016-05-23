@@ -3,12 +3,13 @@
 
 script "newLife.ash"
 notify "Bale";
-since r16754; // Track earned AWoL skill points in awolPointsBeanslinger, awolPointsCowpuncher, and awolPointsSnakeoiler
+since r16944; // Track Enlightenment points for The Source
 import "zlib.ash";
 
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, Community Service, Avatar of West of Loathing] 
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, Community Service,
+Avatar of West of Loathing, The Source] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -96,7 +97,7 @@ void set_choice_adventures() {
 	set_choice(878, 3, "Bedroom, Ornate Nightstand: Get spectacles");
 	if(my_path() == "Bees Hate You")
 		set_choice(879, 3, "Bedroom, Rustic Nightstand: Fight Mistress for Antique Mirror");
-	else if(primestat == $stat[Moxie])
+	else if(primestat == $stat[Moxie] || my_path() == "The Source")
 		set_choice(879, 1, "Bedroom, Rustic Nightstand: Get Moxie Stats");
 	else
 		set_choice(879, 2, "Bedroom, Rustic Nightstand: Get grouchy restless spirit");
@@ -206,7 +207,7 @@ void set_choice_adventures() {
 	if(skipStatNCs) {
 		set_choice("oceanDestination", "ignore", "At the Poop Deck: Skip the wheel");
 	} else {
-		set_choice("oceanDestination", primestat.to_lower_case(), "At the Poop Deck: take the Wheel and Sail to "+primestat+" stats");
+		set_choice("oceanDestination", to_lower_case(primestat), "At the Poop Deck: take the Wheel and Sail to "+primestat+" stats");
 	}
 	
 	// Prime Stat specific choices
@@ -225,6 +226,8 @@ void set_choice_adventures() {
 		set_choice(145, 1, "Frats on the Verge of War, Fratacombs: Get Muscle stats");
 		set_choice(793, 1, "Take Muscle vacation.");
 		set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
+		if(my_path() == "The Source")
+			set_choice(153, 1, "Defiled Alcove: Desperately need mainstat when fighting the Source");
 		break;
 	case $stat[mysticality]:
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
@@ -238,7 +241,11 @@ void set_choice_adventures() {
 		set_choice(141, 1, "Hippies on the Verge of War, Blockin' Out the Scenery: Get Mysticality stats");
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
 		set_choice(793, 2, "Take Mysticality vacation.");
-		set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
+		if(my_path() == "The Source") {
+			set_choice(155, 1, "Defiled Niche: Desperately need mainstat when fighting the Source");
+			set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
+		} else
+			set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
 		break;
 	case $stat[moxie]:
 		set_choice(73, 3, "Whitey's Grove: Get wedding cake and rice");
@@ -255,6 +262,10 @@ void set_choice_adventures() {
 		set_choice(141, 2, "Hippies on the Verge of War, Blockin' Out the Scenery: Get rations");
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
 		set_choice(793, 3, "Take Moxie vacation.");
+		if(my_path() == "The Source") {
+			set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
+			set_choice(157, 1, "Defiled Nook: Desperately need mainstat when fighting the Source");
+		} else
 		set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
 		break;
 	}
@@ -419,6 +430,9 @@ void get_stuff() {
 		visit_url("place.php?whichplace=town_right&action=townright_ltt");
 		run_choice(8);
 	}
+	// Clan Floundry -- get the fishin' pole. I hate the server hit, but I don't have another option yet
+	if(available_amount($item[Clan VIP Lounge key]) > 0 && visit_url("clan_viplounge.php").contains_text("vipfloundry.gif"))
+		visit_url("clan_viplounge.php?action=floundry");
 }
 
 // Visit Mt. Noob to get pork gems.
@@ -513,6 +527,10 @@ void handle_starting_items() {
 	// Unpack astral consumables
 	foreach it in $items[astral hot dog dinner, astral six-pack, carton of astral energy drinks, box of bear arms]
 		if(item_amount(it) > 0 && good(it)) use(item_amount(it), it);
+	
+	// In AWoL, holster your toy sixgun
+	if(available_amount($item[toy sixgun]) > 0)
+		equip($slot[holster], $item[toy sixgun]);
 		
 	// Put on the best stuff you've got.
 	vprint("Put on your best gear.", "olive", 3);
@@ -627,6 +645,14 @@ void path_skills(boolean always_learn) {
 				for sk from 0 to 9
 					visit_url("choice.php?whichchoice=" + to_string(to_int(awol) + 1159) + "&option=1&pwd&whichskill=" + sk);
 			}
+		}
+		break;
+	case "The Source":
+		// choice.php?whichchoice=1188&option=1&pwd&skid=9
+		if(get_property("sourceEnlightenment") > 10) {
+			visit_url("place.php?whichplace=manor1&action=manor1_sourcephone_ring");
+			for x from 1 to 11
+				visit_url("choice.php?whichchoice=1188&option=1&pwd&skid=" + x);
 		}
 		break;
 	}
