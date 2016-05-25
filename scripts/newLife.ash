@@ -649,11 +649,11 @@ void path_skills(boolean always_learn) {
 		break;
 	case "The Source":
 		// choice.php?whichchoice=1188&option=1&pwd&skid=9
-		if(get_property("sourceEnlightenment").to_int() > 10) {
-			visit_url("place.php?whichplace=manor1&action=manor1_sourcephone_ring");
-			for x from 1 to 11
-				visit_url("choice.php?whichchoice=1188&option=1&pwd&skid=" + x);
-		}
+		# if(get_property("sourceEnlightenment").to_int() > 10) {
+			# visit_url("place.php?whichplace=manor1&action=manor1_sourcephone_ring");
+			# for x from 1 to 11
+				# visit_url("choice.php?whichchoice=1188&option=1&pwd&skid=" + x);
+		# }
 		break;
 	}
 }
