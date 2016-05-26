@@ -181,7 +181,10 @@ void set_choice_adventures() {
 	} else {
 		set_choice(153, 4, "Defiled Alcove: skip adventure");
 		set_choice(155, 4, "Defiled Niche: skip adventure");
-		set_choice(157, 4, "Defiled Nook: skip adventure");
+		if(my_path() == "Zombie Slayer" && !have_familiar($familiar[Hovering Skull]) && storage_amount($item[talkative skull]) == 0)
+			set_choice(157, 1, "Defiled Nook: get talkative skull familiar");
+		else
+			set_choice(157, 4, "Defiled Nook: skip adventure");
 	}
 	if($strings[Way of the Surprising Fist, Avatar of Boris] contains my_path()) {
 		// Can't use the outfit, so get some meat
@@ -649,11 +652,11 @@ void path_skills(boolean always_learn) {
 		break;
 	case "The Source":
 		// choice.php?whichchoice=1188&option=1&pwd&skid=9
-		# if(get_property("sourceEnlightenment").to_int() > 10) {
-			# visit_url("place.php?whichplace=manor1&action=manor1_sourcephone_ring");
-			# for x from 1 to 11
-				# visit_url("choice.php?whichchoice=1188&option=1&pwd&skid=" + x);
-		# }
+		if(get_property("sourceEnlightenment").to_int() > 10) {
+			visit_url("place.php?whichplace=manor1&action=manor1_sourcephone_ring");
+			for x from 1 to 11
+				visit_url("choice.php?whichchoice=1188&option=1&pwd&skid=" + x);
+		}
 		break;
 	}
 }
