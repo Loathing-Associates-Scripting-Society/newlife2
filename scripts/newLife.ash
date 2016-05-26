@@ -176,15 +176,15 @@ void set_choice_adventures() {
 		set_choice(297, 3, "Haiku Dungeon: Skip adventure to keep looking for the Bugbear Disguise");
 	if(my_path() == "Way of the Surprising Fist" && in_hardcore()) {
 		set_choice(153, 2, "Defiled Alcove: get meat");
-		set_choice(155, 2, "Defiled Niche: get meat");
-		set_choice(157, 3, "Defiled Nook: get meat");
+		set_choice(155, 3, "Defiled Nook: get meat");
+		set_choice(157, 2, "Defiled Niche: get meat");
 	} else {
 		set_choice(153, 4, "Defiled Alcove: skip adventure");
-		set_choice(155, 4, "Defiled Niche: skip adventure");
+		set_choice(157, 4, "Defiled Niche: skip adventure");
 		if(my_path() == "Zombie Slayer" && !have_familiar($familiar[Hovering Skull]) && storage_amount($item[talkative skull]) == 0)
-			set_choice(157, 1, "Defiled Nook: get talkative skull familiar");
+			set_choice(155, 1, "Defiled Nook: get talkative skull familiar");
 		else
-			set_choice(157, 4, "Defiled Nook: skip adventure");
+			set_choice(155, 4, "Defiled Nook: skip adventure");
 	}
 	if($strings[Way of the Surprising Fist, Avatar of Boris] contains my_path()) {
 		// Can't use the outfit, so get some meat
@@ -245,7 +245,7 @@ void set_choice_adventures() {
 		set_choice(145, 2, "Frats on the Verge of War, Fratacombs: Get food");
 		set_choice(793, 2, "Take Mysticality vacation.");
 		if(my_path() == "The Source") {
-			set_choice(155, 1, "Defiled Niche: Desperately need mainstat when fighting the Source");
+			set_choice(157, 1, "Defiled Niche: Desperately need mainstat when fighting the Source");
 			set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
 		} else
 			set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
@@ -267,7 +267,7 @@ void set_choice_adventures() {
 		set_choice(793, 3, "Take Moxie vacation.");
 		if(my_path() == "The Source") {
 			set_choice(876, 2, "Bedroom, White Nightstand: Get Muscle stats");
-			set_choice(157, 1, "Defiled Nook: Desperately need mainstat when fighting the Source");
+			set_choice(155, 1, "Defiled Nook: Desperately need mainstat when fighting the Source");
 		} else
 		set_choice(876, 1, "Bedroom, White Nightstand: old leather wallet");
 		break;
