@@ -396,7 +396,8 @@ void buy_stuff() {
 
 	string garner;
 	
-	if(need_accordion())
+	// Don't get the toy accordion if I have a Deck of Every Card because I'll probably prefer to sell a Mickey Mantle card and buy an antique accordion.
+	if(need_accordion() && !(available_amount($item[Deck of Every Card]) > 0 && be_good($item[Deck of Every Card])))
 		garner = trade_pork4item($item[toy accordion]);
 		
 	if(knoll_available() && good($item[detuned radio]))
