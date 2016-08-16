@@ -9,7 +9,7 @@ import "zlib.ash";
 if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
 Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, Community Service,
-Avatar of West of Loathing, The Source] 
+Avatar of West of Loathing, The Source, Nuclear Autumn] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -57,6 +57,9 @@ boolean good(item it) {
 		break;
 	case "BIG!":
 		if($items[detuned radio] contains it) return false; // Unnecessary expense
+		break;
+	case "Nuclear Autumn":
+		if($items[chewing gum on a string] contains it) return false; 
 		break;
 	}
 	return be_good(it);
@@ -437,6 +440,9 @@ void get_stuff() {
 	// Clan Floundry -- get the fishin' pole. I hate the server hit, but I don't have another option yet
 	if(available_amount($item[Clan VIP Lounge key]) > 0 && visit_url("clan_viplounge.php").contains_text("vipfloundry.gif"))
 		visit_url("clan_viplounge.php?action=floundry");
+	// 11th Precinct
+	if(get_property("hasDetectiveSchool") == "true")
+		visit_url("place.php?whichplace=town_wrong&action=townwrong_precinct");
 }
 
 // Visit Mt. Noob to get pork gems.
