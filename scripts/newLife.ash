@@ -303,7 +303,9 @@ void campground(boolean softBoo) {
 	// Break the hippy stone?
 	if(vars["newLife_SmashHippyStone"] == "true" && !hippy_stone_broken() && good("Hippy Stone")) {
 		vprint("Smashing that hippy-dippy crap so you can have some violent fun!", "olive", 3);
-		visit_url("campground.php?confirm=on&smashstone=Yep.&pwd");
+		string pvp = visit_url("peevpee.php?confirm=on&action=smashstone&pwd");
+		if(pvp.contains_text("Pledge allegiance to"))
+			visit_url("peevpee.php?action=pledge&place=fight&pwd");
 	}
 	
 	if(get_dwelling() != $item[big rock])
@@ -729,8 +731,9 @@ void special(boolean bonus_actions) {
 				(pull_it($item[Sneaky Pete's leather jacket]) || pull_it($item[Sneaky Pete's leather jacket (collar popped)]) || pull_it($item[cane-mail shirt]));
 			
 			// Back
-			if(have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
-				cli_execute("bjornify El Vibrato Megadrone");
+			if(!(available_amount($item[protonic accelerator pack]) > 0 && good($item[protonic accelerator pack])))
+				if(!have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
+					cli_execute("bjornify El Vibrato Megadrone");
 			
 			// Best Hat? Jarlsberg comes with all the hat he needs and some other paths auto-pull their Path Hat
 			if(my_path() != "Avatar of Jarlsberg" && available_amount($item[The Crown of Ed the Undying]) < 1 && available_amount($item[Boris's Helm]) < 1 && available_amount($item[Boris's Helm (askew)]) < 1) {
