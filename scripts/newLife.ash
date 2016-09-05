@@ -6,16 +6,16 @@ notify "Bale";
 since r16944; // Track Enlightenment points for The Source
 import "zlib.ash";
 
-if(!($strings[None, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
+if(!($strings[None, Standard, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
-Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Standard, Actually Ed the Undying, One Crazy Random Summer, Community Service,
+Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Actually Ed the Undying, One Crazy Random Summer, Community Service,
 Avatar of West of Loathing, The Source, Nuclear Autumn] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
 }
 
-// Often I get this script out before full mafia support. Hence these variable are necessary.
+// Often I get this script out before full mafia support. Hence these variable are used.
 // It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
 class myclass = my_class();
@@ -660,11 +660,22 @@ void path_skills(boolean always_learn) {
 		}
 		break;
 	case "The Source":
-		// choice.php?whichchoice=1188&option=1&pwd&skid=9
 		if(get_property("sourceEnlightenment").to_int() > 10) {
 			visit_url("place.php?whichplace=manor1&action=manor1_sourcephone_ring");
 			for x from 1 to 11
 				visit_url("choice.php?whichchoice=1188&option=1&pwd&skid=" + x);
+		}
+		break;
+	// This isn't exactly learning new skills, but it is relevant and convenient to put it here.
+	case "Nuclear Autumn":
+		int shelter = to_int(get_property("falloutShelterLevel"));
+		if(shelter >= 5 && get_property("falloutShelterChronoUsed") == "false") {
+			print("Visiting your fallout shelter's Chronodynamics Laboratory.", "blue");
+			visit_url("place.php?whichplace=falloutshelter&action=vault5");
+		}
+		if(shelter >= 8 && get_property("falloutShelterCoolingTankUsed") == "false") {
+			print("Visiting your fallout shelter's Main Reactor.", "blue");
+			visit_url("place.php?whichplace=falloutshelter&action=vault5");
 		}
 		break;
 	}
@@ -731,7 +742,7 @@ void special(boolean bonus_actions) {
 				(pull_it($item[Sneaky Pete's leather jacket]) || pull_it($item[Sneaky Pete's leather jacket (collar popped)]) || pull_it($item[cane-mail shirt]));
 			
 			// Back
-			if(!(available_amount($item[protonic accelerator pack]) > 0 && good($item[protonic accelerator pack])))
+			if(available_amount($item[protonic accelerator pack]) == 0 || !good($item[protonic accelerator pack])) // New guear never needs to be pulled anymore!
 				if(!have_familiar($familiar[El Vibrato Megadrone]) && good($familiar[El Vibrato Megadrone]) && pull_it($item[Buddy Bjorn]))
 					cli_execute("bjornify El Vibrato Megadrone");
 			
