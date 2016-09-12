@@ -675,7 +675,7 @@ void path_skills(boolean always_learn) {
 		}
 		if(shelter >= 8 && get_property("falloutShelterCoolingTankUsed") == "false") {
 			print("Visiting your fallout shelter's Main Reactor.", "blue");
-			visit_url("place.php?whichplace=falloutshelter&action=vault5");
+			visit_url("place.php?whichplace=falloutshelter&action=vault8");
 		}
 		break;
 	}
