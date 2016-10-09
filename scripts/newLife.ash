@@ -97,10 +97,10 @@ void set_choice_adventures() {
 	set_choice(888, 4, "Library, Rise of the House of Spookyraven: Ignore");
 	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
 	set_choice(877, 1, "Bedroom, Mahogany Nightstand: old coin purse");
-	if(my_path() == "Nuclear Autumn") // Cannot cook a wine bomb, so spectacles are useless
-		set_choice(878, 4, "Bedroom, Ornate Nightstand: Get spectacles");
-	else
+	if(in_hardcore() && my_path() == "Nuclear Autumn") // Cannot cook a wine bomb, so spectacles are useless
 		set_choice(878, 3, "Bedroom, Ornate Nightstand: Get disposable instant camera");
+	else
+		set_choice(878, 4, "Bedroom, Ornate Nightstand: Get spectacles");
 	if(my_path() == "Bees Hate You")
 		set_choice(879, 3, "Bedroom, Rustic Nightstand: Fight Mistress for Antique Mirror");
 	else if(primestat == $stat[Moxie] || my_path() == "The Source")
