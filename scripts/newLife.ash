@@ -543,9 +543,14 @@ void handle_starting_items() {
 	foreach it in $items[astral hot dog dinner, astral six-pack, carton of astral energy drinks, box of bear arms]
 		if(item_amount(it) > 0 && good(it)) use(item_amount(it), it);
 	
-	// In AWoL, holster your toy sixgun
-	if(available_amount($item[toy sixgun]) > 0)
-		equip($slot[holster], $item[toy sixgun]);
+	// In AWoL, holster your toy sixgun or, if you're casual about it, Pecos Dave's sixgun.
+	item best_gun() {
+		foreach gun in $items[Pecos Dave's sixgun, porquoise-handled sixgun, hamethyst-handled sixgun, baconstone-handled sixgun, custom sixgun, makeshift sixgun, reliable sixgun, rinky-dink sixgun, toy sixgun]
+			if(available_amount(gun) > 0) return gun;
+		return $item[none];
+	}
+	if(my_path() == "Avatar of West of Loathing")
+		equip($slot[holster], best_gun());
 		
 	// Put on the best stuff you've got.
 	vprint("Put on your best gear.", "olive", 3);
