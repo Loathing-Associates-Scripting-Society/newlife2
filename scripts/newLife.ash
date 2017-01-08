@@ -485,10 +485,8 @@ familiar start_familiar() {
 	if(my_path() == "Zombie Slayer" && have_familiar($familiar[Hovering Skull]))
 		return $familiar[Hovering Skull];
 	
-	foreach f in $familiars[He-Boulder, Frumious Bandersnatch, Baby Bugged Bugbear, Grim Brother, Bloovian Groose, Gluttonous Green Ghost, 
-	  Spirit Hobo, Fancypants Scarecrow, Ancient Yuletide Troll, Cheshire Bat, Cymbal-Playing Monkey, Nervous Tick, 
-	  Hunchbacked Minion, Uniclops, Chauvinist Pig, Dramatic Hedgehog, Blood-Faced Volleyball, Reagnimated Gnome, 
-	  Jill-O-Lantern, Hovering Sombrero]
+	foreach f in $familiars[Ms. Puck Man, Puck Man, Intergnat, Machine Elf, Optimistic Candle, Rockin' Robin, Frumious Bandersnatch, Baby Bugged Bugbear, 
+	  Fist Turkey, Golden Monkey, Grim Brother, Bloovian Groose, Gluttonous Green Ghost, Spirit Hobo, Fancypants Scarecrow, Mad Hatrack]
 		if(have_familiar(f) && good(f)) return f;
 	
 	return $familiar[none];
@@ -808,7 +806,7 @@ void new_ascension() {
 // These are default values here. To change for each character, edit their vars file in /data direcory or use the zlib commands.
 setvar("newLife_SetupGuyMadeOfBees", FALSE); // If you like to set up the guy made of bees set this TRUE. 
 setvar("newLife_SmashHippyStone", FALSE);	// Smash stone if you want to break it at level 1 for some PvPing!
-setvar("newLife_UseNewbieTent", TRUE);		// Use newbie tent if you don't want togive your clannes a fair shot at bricking you in the face!
+setvar("newLife_UseNewbieTent", TRUE);		// Use newbie tent if you don't want to give your clannes a fair shot at bricking you in the face!
 setvar("newLife_SellPorkForStuff", TRUE);	// Sell pork gems to purchase detuned radio, toy accordion & seal tooth
 setvar("newLife_Extras", FALSE); 			// Mixed bag of custom actions. This is personal to me, but maybe someone else will like it also
 
