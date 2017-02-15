@@ -3,13 +3,13 @@
 
 script "newLife.ash"
 notify "Bale";
-since r16944; // Track Enlightenment points for The Source
+since r17807; // Basic Gelatinous Noob tracking
 import "zlib.ash";
 
 if(!($strings[None, Standard, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
 Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Actually Ed the Undying, One Crazy Random Summer, Community Service,
-Avatar of West of Loathing, The Source, Nuclear Autumn, 29, Gelatinous Noob] 
+Avatar of West of Loathing, The Source, Nuclear Autumn, Gelatinous Noob] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -19,10 +19,10 @@ Avatar of West of Loathing, The Source, Nuclear Autumn, 29, Gelatinous Noob]
 // It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
 class myclass = my_class();
-if(my_path() == "23") {
-	primestat = $stat[moxie];
+# if(my_path() == "29") {
+	# primestat = $stat[moxie];
 	# myclass = $class[Avatar of Sneaky Pete];
-}
+# }
 boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class For Pigs";
 
 // This is a wrapper for be_good() that contains exceptions for this script's purpose.
