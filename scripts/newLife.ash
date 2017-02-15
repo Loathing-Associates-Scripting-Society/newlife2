@@ -9,7 +9,7 @@ import "zlib.ash";
 if(!($strings[None, Standard, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
 Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Actually Ed the Undying, One Crazy Random Summer, Community Service,
-Avatar of West of Loathing, The Source, Nuclear Autumn] 
+Avatar of West of Loathing, The Source, Nuclear Autumn, 29, Gelatinous Noob] 
   contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
 	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
 	exit;
@@ -19,10 +19,10 @@ Avatar of West of Loathing, The Source, Nuclear Autumn]
 // It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
 class myclass = my_class();
-# if(my_path() == "17") {
-	# primestat = $stat[moxie];
+if(my_path() == "23") {
+	primestat = $stat[moxie];
 	# myclass = $class[Avatar of Sneaky Pete];
-# }
+}
 boolean skipStatNCs = my_path() == "BIG!" || my_path() == "Class Act II: A Class For Pigs";
 
 // This is a wrapper for be_good() that contains exceptions for this script's purpose.
@@ -415,8 +415,11 @@ void buy_stuff() {
 	if(my_path() == "Heavy Rains")
 		garner = trade_pork4item($item[miniature life preserver]).and_string(garner);
 	
+	// Seal teeth used to be useful, but good play doesn't really need them anymore.
+	// Leaving the code here in case things change or they become useful again in some future path.
+	boolean sealtooth = false;
 	// For disco bandits, Suckerpunch is better than seal tooth
-	if(myclass != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && good($item[chewing gum on a string])) {
+	if(sealtooth && myclass != $class[Disco Bandit] && item_amount($item[seal tooth]) == 0 && good($item[seal tooth]) && good($item[chewing gum on a string])) {
 		while(!worthless() && meat4pork($item[chewing gum on a string]))
 			use(1, $item[chewing gum on a string]);
 		if(worthless() && (available_amount($item[hermit permit]) > 0 || meat4pork($item[hermit permit]))) {
