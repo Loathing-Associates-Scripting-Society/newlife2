@@ -10,8 +10,8 @@ if(!($strings[None, Standard, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate 
 Avatar of Boris, Bugbear Invasion, Zombie Slayer, Class Act, Avatar of Jarlsberg, BIG!, KOLHS, Class Act II: A Class For Pigs, 
 Avatar of Sneaky Pete, Slow and Steady, Heavy Rains, Picky, Actually Ed the Undying, One Crazy Random Summer, Community Service,
 Avatar of West of Loathing, The Source, Nuclear Autumn, Gelatinous Noob] 
-  contains my_path()) && user_confirm("Your current challenge path is unknown to this script!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
-	vprint("Your current path is unknown to this script! A new version of this script should be released very soon.", -1);
+  contains my_path()) && user_confirm("Your current challenge path is unknown to newLife!\nUnknown and unknowable errors may take place if it is run.\nDo you want to abort?")) {
+	vprint("Your current path is unknown to newLife! A new version of this script should be released very soon.", -1);
 	exit;
 }
 
