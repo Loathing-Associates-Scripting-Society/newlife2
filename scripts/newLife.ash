@@ -37,6 +37,9 @@ boolean good(string it) {
 	case "Actually Ed the Undying":
 		if(it == "familiar"|| it == "Hippy Stone") return false;
 		break;
+	case "License to Adventure":
+		if(it == "familiar") return false;
+		break;
 	}
 	return be_good(it);
 }
@@ -66,6 +69,8 @@ boolean good(item it) {
 }
 
 boolean good(familiar f) {
+	if(my_path() == "License to Adventure")
+		return false;
 	return be_good(f); 
 }
 
@@ -170,8 +175,10 @@ void set_choice_adventures() {
 		set_choice("violetFogGoal", 8, "Violet Fog is great place to get the munchies.");
 	else
 		set_choice("violetFogGoal", 0, "Violet Fog is too out of date to care about.");
+	
 	// Ghost Dog
-	# set_choice(1106, 2, 'Ghost Dog says, "Wooof! Wooooooof!": Get buff'); // 1 is stats, 2 is buff, 3 is Ghost Dog food
+	if(my_path() == "License to Adventure")
+		set_choice(1106, 2, 'Ghost Dog says, "Wooof! Wooooooof!": Get buff since you don\'t need dog food or stats.'); // 1 is stats, 2 is buff, 3 is Ghost Dog food
 	set_choice(1107, 1, "Play Fetch with your Ghost Dog: Get 1 tennis ball");
 	set_choice(1108, my_ascensions() % 2 + 1, "Your Dog Found Something Again: Get food or booze"); // 1 is food, 2 is booze - Alternate
 	
