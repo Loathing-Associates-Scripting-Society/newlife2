@@ -559,7 +559,11 @@ void handle_starting_items() {
 	}
 	if(my_path() == "Avatar of West of Loathing")
 		equip($slot[holster], best_gun());
-		
+	
+	// If you have a KGB, prep it!
+	if(item_amount($item[Kremlin's Greatest Briefcase]) > 0 && svn_exists("Ezandora-Briefcase-branches-Release"))
+		cli_execute("Briefcase unlock");
+	
 	// Put on the best stuff you've got.
 	vprint("Put on your best gear.", "olive", 3);
 	// First equip best familiar!
@@ -699,7 +703,7 @@ void path_skills(boolean always_learn) {
 
 // If you've got a Shrine to the Barrel God, get free stuff from the barrel.
 void free_barrels() {
-	if(!in_bad_moon() && get_property("barrelShrineUnlocked") == "true") {
+	if(!in_bad_moon() && get_property("barrelShrineUnlocked") == "true" && is_unrestricted($item[shrine to the Barrel god])) {
 		print("Seek free stuff from the Barrel full of Barrels since you have the Barrel god's blessing.", "blue");
 		matcher barrel = create_matcher('<div class="ex"><a class="spot" href="([^"]+)"><img title="A barrel"', visit_url("barrel.php"));
 		while(barrel.find())
