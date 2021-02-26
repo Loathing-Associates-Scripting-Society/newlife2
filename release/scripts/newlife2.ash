@@ -1,8 +1,6 @@
-// Bale's PostAscensionScript: newLife
-//      set postAscensionScript = newLife.ash
-
-script "newLife.ash"
-notify "Bale";
+script "newlife2.ash"
+// Maintainers
+notify "philmasterplus";
 since r17807; // Basic Gelatinous Noob tracking
 import "zlib.ash";
 
