@@ -1,7 +1,7 @@
 script "newlife2.ash"
 // Maintainers
 notify "philmasterplus";
-since r17807; // Basic Gelatinous Noob tracking
+since r20653; // Torso Awaregness -> Torso Awareness
 import "zlib.ash";
 
 if(!($strings[None, Standard, Teetotaler, Boozetafarian, Oxygenarian, Bees Hate You, Way of the Surprising Fist, Trendy,
@@ -756,7 +756,7 @@ void special(boolean bonus_actions) {
 				(pull_it($item[Thor's Pliers]) || pull_it($item[ice sickle]));
 
 			// Shirt
-			if(have_skill($skill[Torso Awaregness]) && available_amount($item[astral shirt]) < 1)
+			if(have_skill($skill[Torso Awareness]) && available_amount($item[astral shirt]) < 1)
 				(pull_it($item[Sneaky Pete's leather jacket]) || pull_it($item[Sneaky Pete's leather jacket (collar popped)]) || pull_it($item[cane-mail shirt]));
 
 			// Back
