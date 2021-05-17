@@ -138,7 +138,7 @@ void set_choice_adventures() {
 	set_choice(25, 3, "Dungeon of Doom: Don't buy a mimic");
 	set_choice(875, 1, "Billiards Room: Play Pool");
 	set_choice(888, 4, "Library, Rise of the House of Spookyraven: Ignore");
-	set_choice(889, 4, "Library, Fall of the House of Spookyraven: Ignore");
+	set_choice(889, 5, "Library, Fall of the House of Spookyraven: Ignore");
 	set_choice(877, 1, "Bedroom, Mahogany Nightstand: old coin purse");
 	if(in_hardcore() && my_path() == "Nuclear Autumn") // Cannot cook a wine bomb, so spectacles are useless
 		set_choice(878, 3, "Bedroom, Ornate Nightstand: Get disposable instant camera");
