@@ -149,7 +149,7 @@ boolean pathAllowsChangingFamiliar()
 }
 
 boolean good(familiar f) {
-	if($strings[License to Adventure, Pocket Familiars, Quantum Terrarium] contains my_path())
+	if(!pathAllowsChangingFamiliar())	//for our purposes if a path does not let us change familiars then familiar is not good
 		return false;
 	return be_good(f);
 }
