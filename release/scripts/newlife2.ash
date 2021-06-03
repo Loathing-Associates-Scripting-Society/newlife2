@@ -35,6 +35,7 @@ if (
 			Nuclear Autumn,
 			Gelatinous Noob,
 			License to Adventure,
+			Quantum Terrarium,
 		] contains my_path()
 	)
 ) {
@@ -106,8 +107,49 @@ boolean good(item it) {
 	return be_good(it);
 }
 
+boolean pathHasFamiliar()
+{
+	if($classes[
+	Ed, 
+	Avatar of Boris,
+	Avatar of Jarlsberg,
+	Avatar of Sneaky Pete,
+	Vampyre
+	] contains my_class())
+	{
+		return false;
+	}
+	
+	//path check for cases where the path bans familairs and does not use a unique class.
+	//since pokefam converts your familiars into pokefam, they are not actually familiars in that path and cannot be used as familiars.
+	if($strings[
+	License to Adventure,
+	Pocket Familiars
+	] contains my_path())
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+boolean pathAllowsChangingFamiliar()
+{
+	if(!pathHasFamiliar())
+	{
+		return false;
+	}
+
+	// path check for case(s) where Path has familiars but forces you to use one of its choice
+	if(my_path() == "Quantum Terrarium")
+	{
+		return false;
+	}
+	return true;
+}
+
 boolean good(familiar f) {
-	if(my_path() == "License to Adventure")
+	if(!pathAllowsChangingFamiliar())	//for our purposes if a path does not let us change familiars then familiar is not good
 		return false;
 	return be_good(f);
 }
@@ -605,10 +647,13 @@ void handle_starting_items() {
 	// Put on the best stuff you've got.
 	vprint("Put on your best gear.", "olive", 3);
 	// First equip best familiar!
-	familiar fam = (vars contains "is_100_run")? to_familiar(getvar("is_100_run")): my_familiar();
-	if(fam == $familiar[none] || !good(fam) || !have_familiar(fam))
-		fam = start_familiar();
-	use_familiar(fam);
+	if(pathAllowsChangingFamiliar())
+	{
+		familiar fam = (vars contains "is_100_run")? to_familiar(getvar("is_100_run")): my_familiar();
+		if(fam == $familiar[none] || !good(fam) || !have_familiar(fam))
+			fam = start_familiar();
+		use_familiar(fam);
+	}
 }
 
 // Optimal restoration settings for level 1. These will need to be changed by level 4
