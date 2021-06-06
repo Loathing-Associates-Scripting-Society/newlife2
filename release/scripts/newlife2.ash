@@ -4,56 +4,6 @@ notify "philmasterplus";
 since r20653; // Torso Awaregness -> Torso Awareness
 import "zlib.ash";
 
-if (
-	!(
-		$strings[
-			None,
-			Standard,
-			Teetotaler,
-			Boozetafarian,
-			Oxygenarian,
-			Bees Hate You,
-			Way of the Surprising Fist,
-			Trendy,
-			Avatar of Boris,
-			Bugbear Invasion,
-			Zombie Slayer,
-			Class Act,
-			Avatar of Jarlsberg,
-			BIG!,
-			KOLHS,
-			Class Act II: A Class For Pigs,
-			Avatar of Sneaky Pete,
-			Slow and Steady,
-			Heavy Rains,
-			Picky,
-			Actually Ed the Undying,
-			One Crazy Random Summer,
-			Community Service,
-			Avatar of West of Loathing,
-			The Source,
-			Nuclear Autumn,
-			Gelatinous Noob,
-			License to Adventure,
-			Quantum Terrarium,
-		] contains my_path()
-	)
-) {
-	int countdown = 30;
-	string warning_message =
-		`newLife2 does not officially support your current path ("{my_path()}").` +
-		`\nIf you continue, it may select suboptimal choices and do strange things.` +
-		`\nDo you want to abort?` +
-		`\n(newLife2 will continue in {countdown} seconds.)`;
-	if (user_confirm(warning_message, countdown * 1000, false)) {
-		vprint(
-			`Aborting because newLife2 does not know how to handle your current path ("{my_path()}").`,
-			-1
-		);
-		exit;
-	}
-}
-
 // Often I get this script out before full mafia support. Hence these variable are used.
 // It's no longer necessary for old paths however I may need it in the future.
 stat primestat = my_primestat();
