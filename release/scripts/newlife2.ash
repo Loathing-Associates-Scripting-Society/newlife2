@@ -574,8 +574,10 @@ void equip_stuff() {
 
 void handle_starting_items() {
 	// Free pulls
-	if(good($item[brick]))
-		retrieve_item(available_amount($item[brick]), $item[brick]);
+	//at end of 2021 item pulling code was changed in kol itself. this broke multi pulling of free items.
+	//reported bug to kol devs. until this is fixed in kol this feature needs to be disabled to prevent newlife2 from crashing
+	//if(good($item[brick]))
+	//	retrieve_item(available_amount($item[brick]), $item[brick]);
 
 	// Unpack astral consumables
 	foreach it in $items[astral hot dog dinner, astral six-pack, carton of astral energy drinks, box of bear arms]
